@@ -59,7 +59,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    console.log("pi-approve invoked", {
+    console.log("pi-complete invoked", {
       method: event && event.httpMethod,
       node: process && process.version ? process.version : "",
     });
@@ -79,43 +79,50 @@ exports.handler = async (event) => {
     (body && (body.paymentId || body.identifier || body.id || body.payment_id)) ||
     (body && body.paymentDTO && (body.paymentDTO.identifier || body.paymentDTO.paymentId || body.paymentDTO.id)) ||
     "";
+  const txidValue =
+    (body && body.txid) ||
+    (body && body.paymentDTO && body.paymentDTO.transaction && body.paymentDTO.transaction.txid) ||
+    "";
+
   const paymentId = paymentIdValue ? String(paymentIdValue) : "";
+  const txid = txidValue ? String(txidValue) : "";
 
   try {
-    console.log("pi-approve paymentId", paymentId);
+    console.log("pi-complete data", { paymentId: paymentId, txidLen: txid ? txid.length : 0 });
   } catch (e) {}
 
-  if (!paymentId) {
-    return json(400, { ok: false, error: "paymentId is required" });
+  if (!paymentId || !txid) {
+    return json(400, { ok: false, error: "paymentId and txid are required" });
   }
 
-  const url = `https://api.minepi.com/v2/payments/${encodeURIComponent(paymentId)}/approve`;
+  const url = `https://api.minepi.com/v2/payments/${encodeURIComponent(paymentId)}/complete`;
 
   try {
+    const payload = JSON.stringify({ txid: txid });
     const r = await request(
       "POST",
       url,
       {
         Authorization: `Key ${apiKey}`,
         "Content-Type": "application/json",
-        "Content-Length": "0",
+        "Content-Length": Buffer.byteLength(payload),
       },
-      null
+      payload
     );
 
     try {
-      console.log("pi-approve pi-api response", { statusCode: r.statusCode });
+      console.log("pi-complete pi-api response", { statusCode: r.statusCode });
     } catch (e) {}
 
     if (r.statusCode < 200 || r.statusCode >= 300) {
-      return json(r.statusCode || 500, { ok: false, error: "Approve failed", details: r.body || "" });
+      return json(r.statusCode || 500, { ok: false, error: "Complete failed", details: r.body || "" });
     }
 
     return json(200, { ok: true, details: r.body || "" });
   } catch (e) {
     try {
-      console.log("pi-approve error", String((e && e.message) || e || ""));
+      console.log("pi-complete error", String((e && e.message) || e || ""));
     } catch (ee) {}
-    return json(500, { ok: false, error: "Approve error", details: String((e && e.message) || e || "") });
+    return json(500, { ok: false, error: "Complete error", details: String((e && e.message) || e || "") });
   }
 };
