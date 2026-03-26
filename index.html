@@ -3,43 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو سراج فون</title>
+    <title>أبو سراج فون - Pi Network</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    
+    <style>
+        body {
+            background-color: #0b1020;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #ff9800;
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
+        }
+        h1 { color: #ff9800; margin-bottom: 5px; }
+        p { color: #ccc; margin-top: 5px; }
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .price { font-size: 24px; color: #ff9800; font-weight: bold; }
+        .btn {
+            background-color: #ff9800;
+            color: #0b1020;
+            border: none;
+            padding: 15px 30px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { background-color: #e68a00; }
+        .footer { font-size: 12px; color: #666; margin-top: 30px; }
+    </style>
+
     <script>
         const pi = window.Pi;
+        // تفعيل مكتبة Pi بشكل صحيح
         pi.init({ version: "2.0" });
 
-        async function processPayment(productName, amount) {
+        async function startPayment() {
             try {
-                await pi.createPayment({
-                    amount: amount,
-                    memo: "شراء " + productName,
-                    metadata: { productName: productName }
+                const payment = await pi.createPayment({
+                    amount: 10,
+                    memo: "شراء هاتف من أبو سراج فون (تجريبي)",
+                    metadata: { orderId: "12345" }
                 }, {
-                    onReadyForServerApproval: (paymentId) => console.log("بانتظار الموافقة"),
-                    onReadyForServerCompletion: (paymentId) => alert("🎉 نجحت العملية! اكتملت الخطوة 10"),
-                    onCancel: (paymentId) => console.log("تم الإلغاء"),
-                    onError: (error) => console.error(error)
+                    onReadyForServerApproval: (paymentId) => {
+                        console.log("الدفع بانتظار موافقة السيرفر: ", paymentId);
+                    },
+                    onReadyForServerCompletion: (paymentId) => {
+                        alert("🎉 مبروك يا صقر! تمت العملية بنجاح والخطوة 10 اكتملت.");
+                    },
+                    onCancel: (paymentId) => {
+                        console.log("تم إلغاء العملية.");
+                    },
+                    onError: (error, payment) => {
+                        console.error("حدث خطأ: ", error);
+                        alert("حدث خطأ أثناء الدفع، حاول مرة أخرى.");
+                    }
                 });
             } catch (err) {
-                console.error(err);
+                console.error("فشل بدء عملية الدفع: ", err);
             }
         }
     </script>
-    <style>
-        body { background: #0b1020; color: white; font-family: 'Cairo', sans-serif; text-align: center; padding: 20px; }
-        .card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid #ff9800; }
-        .btn { background: #ff9800; color: black; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; }
-    </style>
 </head>
 <body>
-    <div class="card">
+
+    <div class="container">
         <h1>أبو سراج فون</h1>
         <p>عقرة - دهوك</p>
-        <hr>
-        <h3>iPhone 15</h3>
-        <button class="btn" onclick="processPayment('iPhone 15', 10)">شراء (10 Pi)</button>
+        
+        <div class="product-card">
+            <h3>iPhone 15 Pro Max</h3>
+            <div class="price">10 Pi</div>
+            <p>نسخة تجريبية للتوثيق</p>
+        </div>
+
+        <button class="btn" onclick="startPayment()">شراء الآن (10 Pi)</button>
+        
+        <div class="footer">
+            هذا التطبيق مخصص لإكمال الخطوات التقنية في شبكة Pi
+        </div>
     </div>
+
 </body>
 </html>
