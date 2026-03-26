@@ -1,97 +1,86 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر أبو سراج فون</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0c111d;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background-color: #1a2235;
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #f2a900;
-            text-align: center;
-            width: 300px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-        h1 { color: #f2a900; margin-bottom: 10px; }
-        .price { font-size: 24px; color: #f2a900; font-weight: bold; margin: 20px 0; }
-        .btn {
-            background-color: #f2a900;
-            color: black;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.3s;
-        }
-        .btn:hover { background-color: #d49400; }
-        .footer-text { font-size: 12px; color: #888; margin-top: 20px; }
-    </style>
+  <meta charset="UTF-8">
+  <title>متجر Pi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background: #0b0f1a;
+      color: white;
+      text-align: center;
+      font-family: Arial;
+    }
+
+    .box {
+      border: 2px solid gold;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 50px auto;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    button {
+      background: linear-gradient(gold, green);
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="card">
-        <h1>أبو سراج فون</h1>
-        <p>عقرة - دهوك</p>
-        <hr style="border: 0.5px solid #333;">
-        <h3>iPhone 15 Pro Max</h3>
-        <div class="price">Pi 10</div>
-        
-        <button class="btn" onclick="transferPi()">شراء الآن (Pi 10)</button>
+  <div class="box">
+    <h2>متجر Pi</h2>
 
-        <p class="footer-text">نسخة موثقة لشبكة Pi Network</p>
-    </div>
+    <button onclick="buy()">شراء الآن (10 Pi)</button>
 
-    <script>
-        // تهيئة تطبيق Pi بشكل صحيح
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
+    <p id="status"></p>
+  </div>
 
-        async function transferPi() {
-            try {
-                const paymentData = {
-                    amount: 10,
-                    memo: "شراء هاتف من متجر أبو سراج",
-                    metadata: { item: "iPhone 15 Pro Max" }
-                };
+  <script>
+    let isPi = false;
 
-                const callbacks = {
-                    onReadyForServerApproval: (paymentId) => {
-                        console.log("Payment Ready:", paymentId);
-                    },
-                    onReadyForServerCompletion: (paymentId, txid) => {
-                        alert("تمت عملية الدفع بنجاح يا صقر!");
-                    },
-                    onCancel: (paymentId) => { 
-                        console.log("Payment Cancelled"); 
-                    },
-                    onError: (error, payment) => { 
-                        console.error("Error:", error);
-                    }
-                };
+    // التحقق إذا داخل Pi Browser
+    if (window.Pi) {
+      isPi = true;
+      Pi.init({ version: "2.0" });
+      document.getElementById("status").innerText = "✔ داخل Pi Browser";
+    } else {
+      document.getElementById("status").innerText = "⚠ تعمل خارج Pi Browser (وضع تجريبي)";
+    }
 
-                // فتح المحفظة
-                await Pi.createPayment(paymentData, callbacks);
-                
-            } catch (err) {
-                alert("تأكد من فتح المتجر من داخل Pi Browser");
-            }
+    function buy() {
+      if (!isPi) {
+        alert("هذه نسخة تجريبية — افتح داخل Pi Browser للدفع الحقيقي");
+        return;
+      }
+
+      Pi.createPayment({
+        amount: 10,
+        memo: "شراء منتج",
+        metadata: { productId: "1" }
+      }, {
+        onReadyForServerApproval: function(paymentId) {
+          console.log("جاهز للموافقة:", paymentId);
+        },
+        onReadyForServerCompletion: function(paymentId, txid) {
+          console.log("تم الدفع:", txid);
+        },
+        onCancel: function(paymentId) {
+          alert("تم الإلغاء");
+        },
+        onError: function(error) {
+          console.error(error);
         }
-    </script>
+      });
+    }
+  </script>
+
 </body>
 </html>
