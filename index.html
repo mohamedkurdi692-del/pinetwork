@@ -51,15 +51,14 @@
         <hr style="border: 0.5px solid #333;">
         <h3>iPhone 15 Pro Max</h3>
         <div class="price">Pi 10</div>
-        <p style="font-size: 14px; color: #bbb;">نسخة تجريبية للتوثيق</p>
         
         <button class="btn" onclick="transferPi()">شراء الآن (Pi 10)</button>
 
-        <p class="footer-text">هذا التطبيق مخصص لإكمال الخطوات التقنية في شبكة Pi</p>
+        <p class="footer-text">نسخة موثقة لشبكة Pi Network</p>
     </div>
 
     <script>
-        // تهيئة تطبيق Pi
+        // تهيئة تطبيق Pi بشكل صحيح
         const Pi = window.Pi;
         Pi.init({ version: "2.0", sandbox: true });
 
@@ -67,5 +66,32 @@
             try {
                 const paymentData = {
                     amount: 10,
-                    memo: "شراء هاتف من متجر أبو سراج - تجريبي",
-                    metadata: { item:
+                    memo: "شراء هاتف من متجر أبو سراج",
+                    metadata: { item: "iPhone 15 Pro Max" }
+                };
+
+                const callbacks = {
+                    onReadyForServerApproval: (paymentId) => {
+                        console.log("Payment Ready:", paymentId);
+                    },
+                    onReadyForServerCompletion: (paymentId, txid) => {
+                        alert("تمت عملية الدفع بنجاح يا صقر!");
+                    },
+                    onCancel: (paymentId) => { 
+                        console.log("Payment Cancelled"); 
+                    },
+                    onError: (error, payment) => { 
+                        console.error("Error:", error);
+                    }
+                };
+
+                // فتح المحفظة
+                await Pi.createPayment(paymentData, callbacks);
+                
+            } catch (err) {
+                alert("تأكد من فتح المتجر من داخل Pi Browser");
+            }
+        }
+    </script>
+</body>
+</html>
