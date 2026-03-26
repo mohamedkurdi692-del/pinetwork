@@ -8,10 +8,37 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
     
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-      if (window.Pi) { window.Pi.init({ version: "2.0", sandbox: false }); }
-    </script>
+    // تهيئة SDK الخاص بـ Pi
+    const pi = window.Pi;
+    pi.init({ version: "2.0" });
+
+    async function processPayment(productName, amount) {
+        try {
+            const payment = await pi.createPayment({
+                amount: amount,
+                memo: "شراء " + productName + " من أبو سراج فون",
+                metadata: { productName: productName }
+            }, {
+                onReadyForServerApproval: function(paymentId) {
+                    console.log("Payment ready for approval");
+                },
+                onReadyForServerCompletion: function(paymentId, txid) {
+                    alert("تمت عملية الدفع بنجاح! شكراً لك.");
+                },
+                onCancel: function(paymentId) {
+                    console.log("Payment cancelled");
+                },
+                onError: function(error, payment) {
+                    console.error("Payment error", error);
+                }
+            });
+        } catch (err) {
+            alert("يرجى فتح المتجر من داخل متصفح Pi Browser لإتمام الدفع.");
+        }
+    }
+</script>
+
     
     <style>
       :root { --gold: #ff9800; --bg: #0b1020; --card: rgba(255,255,255,0.06); --whatsapp: #25D366; --viber: #7360f2; --telegram: #0088cc; }
