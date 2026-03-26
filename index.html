@@ -3,89 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو سراج فون | Abu Seraj Phone</title>
+    <title>أبو سراج فون</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    
     <script>
-        // تعريف المتغيرات الأساسية للربط
         const pi = window.Pi;
-
-        // تصحيح السطر الذي كان يسبب المشكلة
-        try {
-            pi.init({ version: "2.0" });
-            console.log("تم تفعيل نظام Pi بنجاح");
-        } catch (e) {
-            console.error("فشل تفعيل نظام Pi:", e);
-        }
+        pi.init({ version: "2.0" });
 
         async function processPayment(productName, amount) {
             try {
-                // بدء عملية الدفع
-                const payment = await pi.createPayment({
+                await pi.createPayment({
                     amount: amount,
-                    memo: "تجربة شراء " + productName + " من متجر أبو سراج",
+                    memo: "شراء " + productName,
                     metadata: { productName: productName }
                 }, {
-                    onReadyForServerApproval: function(paymentId) {
-                        // هذه الخطوة ضرورية للخطوة 10
-                        console.log("العملية بانتظار موافقة الخادم: " + paymentId);
-                    },
-                    onReadyForServerCompletion: function(paymentId) {
-                        alert("🎉 مبروك يا أبو سراج! تمت العملية بنجاح والخطوة 10 اكتملت.");
-                    },
-                    onCancel: function(paymentId) {
-                        console.log("تم إلغاء العملية");
-                    },
-                    onError: function(error, paymentId) {
-                        console.error("خطأ في الدفع:", error);
-                    }
+                    onReadyForServerApproval: (paymentId) => console.log("بانتظار الموافقة"),
+                    onReadyForServerCompletion: (paymentId) => alert("🎉 نجحت العملية! اكتملت الخطوة 10"),
+                    onCancel: (paymentId) => console.log("تم الإلغاء"),
+                    onError: (error) => console.error(error)
                 });
             } catch (err) {
-                // إذا لم يفتح المتجر داخل Pi Browser ستظهر هذه الرسالة
-                console.log("يجب تجربة الشراء من داخل تطبيق Pi Browser حصراً");
-                alert("تنبيه: تأكد من فتح الموقع داخل Pi Browser لإتمام الخطوة 10");
+                console.error(err);
             }
         }
     </script>
-
     <style>
-        :root { --gold: #ff9800; --bg: #0b1020; --card: rgba(255, 255, 255, 0.05); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; text-align: center; }
-        header { background: rgba(11, 16, 32, 0.9); padding: 20px; border-bottom: 2px solid var(--gold); }
-        .status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,0,0,0.1); padding: 5px 15px; border-radius: 20px; color: #ff5252; font-size: 14px; margin-top: 10px; border: 1px solid rgba(255,82,82,0.3); }
-        .status-dot { width: 8px; height: 8px; background: #ff5252; border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        .product { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
-        .product img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
-        .buy-btn { background: var(--gold); color: #000; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
-        .buy-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        body { background: #0b1020; color: white; font-family: 'Cairo', sans-serif; text-align: center; padding: 20px; }
+        .card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid #ff9800; }
+        .btn { background: #ff9800; color: black; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>أبو سراج فون | Abu Seraj Phone</h1>
-        <div class="status-badge">
-            <span class="status-dot"></span>
-            المحل مغلق حالياً | Closed Now
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="product">
-            <h3>📍 كوردستان العراق - دهوك - عقرة</h3>
-            <p>وجهتكم الموثوقة لأحدث الهواتف. قريباً سنقبل الدفع بـ Pi Network.</p>
-        </div>
-
-        <div class="product">
-            <img src="https://m.media-amazon.com/images/I/716fAV66uLL._AC_SL1500_.jpg" alt="iPhone 15">
-            <h3>iPhone 15</h3>
-            <button class="buy-btn" onclick="processPayment('iPhone 15', 10)">شراء (10 Pi)</button>
-        </div>
+    <div class="card">
+        <h1>أبو سراج فون</h1>
+        <p>عقرة - دهوك</p>
+        <hr>
+        <h3>iPhone 15</h3>
+        <button class="btn" onclick="processPayment('iPhone 15', 10)">شراء (10 Pi)</button>
     </div>
-
 </body>
 </html>
