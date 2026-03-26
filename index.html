@@ -8,126 +8,105 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
     
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <script>
-    // تهيئة SDK الخاص بـ Pi
-    const pi = window.Pi;
-    pi.init({ version: "2.0" });
+        const pi = window.Pi;
+        pi.init({ version: "2.0" });
 
-    async function processPayment(productName, amount) {
-        try {
-            const payment = await pi.createPayment({
-                amount: amount,
-                memo: "شراء " + productName + " من أبو سراج فون",
-                metadata: { productName: productName }
-            }, {
-                onReadyForServerApproval: function(paymentId) {
-                    console.log("Payment ready for approval");
-                },
-                onReadyForServerCompletion: function(paymentId, txid) {
-                    alert("تمت عملية الدفع بنجاح! شكراً لك.");
-                },
-                onCancel: function(paymentId) {
-                    console.log("Payment cancelled");
-                },
-                onError: function(error, payment) {
-                    console.error("Payment error", error);
-                }
-            });
-        } catch (err) {
-            alert("يرجى فتح المتجر من داخل متصفح Pi Browser لإتمام الدفع.");
+        async function processPayment(productName, amount) {
+            try {
+                const payment = await pi.createPayment({
+                    amount: amount,
+                    memo: "تجربة شراء " + productName + " من متجر أبو سراج",
+                    metadata: { productName: productName }
+                }, {
+                    onReadyForServerApproval: function(paymentId) {
+                        console.log("Payment ready for approval");
+                    },
+                    onReadyForServerCompletion: function(paymentId, txid) {
+                        alert("🎉 تمت عملية الدفع التجريبية بنجاح! الخطوة 10 اكتملت.");
+                    },
+                    onCancel: function(paymentId) { console.log("Cancelled"); },
+                    onError: function(error) { alert("خطأ: يرجى المحاولة من متصفح Pi"); }
+                });
+            } catch (err) {
+                alert("يرجى فتح المتجر من داخل تطبيق Pi Browser");
+            }
         }
-    }
-</script>
-
+    </script>
     
     <style>
-      :root { --gold: #ff9800; --bg: #0b1020; --card: rgba(255,255,255,0.06); --whatsapp: #25D366; --viber: #7360f2; --telegram: #0088cc; }
-      body { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; }
+      :root { --gold: #ff9800; --bg: #0b1020; --card: rgba(255,255,255,0.06); --red: #ff4d4d; }
+      body { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow-x: hidden; }
       
-      /* هيدر احترافي مع حالة المحل */
-      header { width: 100%; background: rgba(11, 16, 32, 0.9); backdrop-filter: blur(15px); padding: 12px 20px; border-bottom: 2px solid var(--gold); display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; z-index: 1000; box-sizing: border-box; }
-      .status-dot { width: 10px; height: 10px; background: #25D366; border-radius: 50%; display: inline-block; margin-left: 5px; box-shadow: 0 0 8px #25D366; }
+      header { width: 100%; background: rgba(11, 16, 32, 0.95); backdrop-filter: blur(10px); padding: 15px; border-bottom: 2px solid var(--gold); display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; z-index: 1000; box-sizing: border-box; }
+      .status-dot-red { width: 10px; height: 10px; background: var(--red); border-radius: 50%; display: inline-block; margin-left: 5px; box-shadow: 0 0 8px var(--red); animation: blink 1.5s infinite; }
+      @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
       
-      .main { margin-top: 90px; padding: 15px; max-width: 900px; margin-left: auto; margin-right: auto; }
+      .main { margin-top: 100px; padding: 15px; max-width: 600px; margin-left: auto; margin-right: auto; }
+      .about-card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,152,0,0.2); margin-bottom: 25px; text-align: center; }
       
-      /* قسم من نحن */
-      .about-card { background: var(--card); border-radius: 25px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
-      .badge { background: rgba(255, 152, 0, 0.1); color: var(--gold); padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; margin-bottom: 15px; display: inline-block; }
-
-      /* شبكة المنتجات */
-      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 40px; }
-      .item { background: var(--card); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-      .item-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
-      .item h3 { font-size: 0.85rem; margin: 5px 0; color: #fff; }
-      .item span { font-size: 0.7rem; color: var(--gold); }
-
-      /* قسم التواصل */
-      .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
-      .btn { display: flex; align-items: center; justify-content: center; padding: 12px; border-radius: 15px; text-decoration: none; color: #fff; font-weight: 700; font-size: 0.85rem; transition: 0.3s; }
-      .btn-ws { background: var(--whatsapp); } .btn-vb { background: var(--viber); } .btn-tg { background: var(--telegram); } .btn-call { background: #333; grid-column: span 2; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+      .item { background: var(--card); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+      .buy-btn { background: var(--gold); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.8rem; margin-top: 10px; width: 100%; }
       
-      /* قسم الأسئلة الشائعة */
-      .faq { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 20px; text-align: right; border: 1px dashed rgba(255,255,255,0.1); }
-      .faq h4 { color: var(--gold); margin-top: 0; }
-      .faq p { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-
-      footer { padding: 40px 20px; font-size: 0.75rem; color: #666; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 40px; }
+      .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .btn { display: flex; align-items: center; justify-content: center; padding: 12px; border-radius: 12px; text-decoration: none; color: #fff; font-weight: bold; font-size: 0.9rem; }
+      .btn-call { background: #333; grid-column: span 2; }
+      .btn-ws { background: #25D366; } .btn-tg { background: #0088cc; }
     </style>
 </head>
 <body>
 
     <header>
-      <div style="display: flex; align-items: center;">
-          <div style="width: 35px; height: 35px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #000; margin-left: 10px;">AS</div>
-          <div style="text-align: right;">
-              <div style="font-weight: 900; font-size: 1rem;">أبو سراج فون</div>
-              <div style="font-size: 0.65rem; color: #aaa;"><span class="status-dot"></span> المحل مفتوح الآن | ئاکرێ</div>
+      <div style="display: flex; align-items: center; width: 100%;">
+          <div style="width: 40px; height: 40px; background: var(--gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #000; margin-left: 12px; font-size: 1.2rem;">AS</div>
+          <div style="text-align: right; flex-grow: 1;">
+              <div style="font-weight: 900; font-size: 1.1rem; color: var(--gold);">أبو سراج فون | Abu Seraj Phone</div>
+              <div style="font-size: 0.75rem; color: #ccc;">
+                  <span class="status-dot-red"></span> المحل مغلق حالياً | Closed Now
+              </div>
           </div>
       </div>
     </header>
 
     <div class="main">
       <div class="about-card">
-          <span class="badge">الأول في عقرة | یەکەم لە ئاکرێ</span>
-          <h2 style="margin: 0; color: var(--gold);">نحن بوابتك لعملة Pi</h2>
-          <p style="font-size: 0.9rem; line-height: 1.7; color: #ddd;">
-              🇮🇶 وجهتكم الموثوقة لأحدث الهواتف الذكية. ندعم رؤية المستقبل من خلال قبول عملة <b>Pi Network</b> فور إطلاق الشبكة المفتوحة.
-              <br>☀️ ئێمە لێرەین بۆ دابینکردنی باشترین مۆبایلەکان. پشتگیری لە پارەدانی Pi دەکەین.
+          <h2 style="margin: 0 0 10px 0; color: var(--gold); font-size: 1.3rem;">📍 كردستان العراق - دهوك - عقرة</h2>
+          <p style="font-size: 0.9rem; color: #ddd; margin: 0;">
+              نحن بوابتكم الموثوقة لأحدث الهواتف الذكية في عقرة. قريباً سندعم الدفع بواسطة عملة Pi Network.
           </p>
       </div>
 
-      <h3 style="text-align: right; border-right: 3px solid var(--gold); padding-right: 10px; margin-bottom: 20px;">الأجهزة المتوفرة | ئامێرەکان</h3>
+      <h3 style="text-align: right; border-right: 4px solid var(--gold); padding-right: 10px; margin-bottom: 20px;">الأجهزة المتوفرة (تجربة الشراء)</h3>
+      
       <div class="grid">
-          <div class="item"><span class="item-icon">📱</span><span>Apple</span><h3>iPhone 15 Pro</h3></div>
-          <div class="item"><span class="item-icon">📲</span><span>Samsung</span><h3>S24 Ultra</h3></div>
-          <div class="item"><span class="item-icon">📱</span><span>Xiaomi</span><h3>14 Ultra</h3></div>
-          <div class="item"><span class="item-icon">🎧</span><span>Audio</span><h3>AirPods Pro</h3></div>
+          <div class="item">
+              <span style="font-size: 2rem;">📱</span>
+              <h3>iPhone 15 Pro</h3>
+              <p style="color: var(--gold); font-size: 0.8rem;">10 Pi</p>
+              <button class="buy-btn" onclick="processPayment('iPhone 15 Pro', 10)">شراء تجريبي</button>
+          </div>
+          <div class="item">
+              <span style="font-size: 2rem;">📲</span>
+              <h3>S24 Ultra</h3>
+              <p style="color: var(--gold); font-size: 0.8rem;">8 Pi</p>
+              <button class="buy-btn" onclick="processPayment('S24 Ultra', 8)">شراء تجريبي</button>
+          </div>
       </div>
 
-      <h3 style="text-align: right; border-right: 3px solid var(--gold); padding-right: 10px; margin-bottom: 20px;">إتصل بنا | پەیوەندی بکە</h3>
+      <h3 style="text-align: right; border-right: 4px solid var(--gold); padding-right: 10px; margin-bottom: 20px;">تواصل معنا</h3>
       <div class="contact-grid">
-          <a href="tel:+9647515037922" class="btn btn-call">📞 إتصال مباشر</a>
+          <a href="tel:+9647515037922" class="btn btn-call">📞 إتصال مباشر: 07515037922</a>
           <a href="https://wa.me/9647515037922" class="btn btn-ws">واتساب</a>
-          <a href="viber://chat?number=9647515037922" class="btn btn-vb">فايبر</a>
-          <a href="https://t.me/+9647515037922" class="btn btn-tg">تليجرام</a>
+          <a href="https://t.me/Saqar_67" class="btn btn-tg">تليجرام</a>
       </div>
 
-      <div class="faq">
-          <h4>💡 معلومات هامة (FAQ)</h4>
-          <p><b>هل يمكنني الشراء بـ Pi الآن؟</b><br>نحن نجهز المتجر حالياً، البيع الفعلي سيبدأ عند فتح الشبكة (Mainnet) رسمياً.</p>
-          <p><b>أين يقع المحل؟</b><br>📍 كردستان العراق / دهوك / عقرة.</p>
-          <p><b>هل يوجد توصيل؟</b><br>نعم، نوفر خدمة التوصيل لكافة محافظات كردستان والعراق.</p>
-      </div>
-
-      <div style="margin-top: 30px; text-align: center; font-size: 0.8rem; color: var(--gold);">
-          📍 دهوك - عقرة - مقابل السوق العام | Duhok - Akre
+      <div style="margin-top: 40px; text-align: center; color: #666; font-size: 0.8rem;">
+          <p>جميع الحقوق محفوظة لمتجر أبو سراج فون © 2026</p>
+          <p>Duhok - Akre - Market Street</p>
       </div>
     </div>
-
-    <footer>
-        <p>تصميم وإدارة متجر أبو سراج فون © 2026</p>
-        <p>Iraq - Kurdistan Region - Akre District</p>
-    </footer>
 
 </body>
 </html>
