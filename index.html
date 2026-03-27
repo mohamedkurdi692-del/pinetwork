@@ -1,3 +1,15 @@
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<script>
+  function initPi() {
+    if (window.Pi) {
+      window.Pi.init({ version: "2.0", sandbox: false });
+      console.log("Pi SDK Initialized!");
+    } else {
+      setTimeout(initPi, 500); // إعادة المحاولة كل نصف ثانية لو لم يجد الـ SDK
+    }
+  }
+  initPi();
+</script>
 <!doctype html>
 <html lang="ar" dir="rtl">
   <head>
