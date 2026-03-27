@@ -1,233 +1,156 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b1020" />
-    <title>Pi Payment Support</title>
-    <link rel="icon" href="./logo.jpg" type="image/jpeg" />
+    <title>أبو سراج فون - Abu Seraj Phone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <script>
-      if (window.Pi && typeof window.Pi.init === "function") {
-        window.Pi.init({ version: "2.0", sandbox: false });
-      }
-    </script>
     <style>
       body {
-        margin: 0;
-        padding: 0;
-        background: #0b1020;
-        color: #fff;
+        margin: 0; padding: 0;
+        background: #0b1020; color: #fff;
         font-family: 'Cairo', sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+        min-height: 100vh; display: flex; flex-direction: column;
       }
       header {
-        width: 100%;
-        background: rgba(11, 16, 32, 0.8);
-        backdrop-filter: blur(10px);
-        padding: 12px 25px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-sizing: border-box;
-        position: fixed;
-        top: 0;
-        z-index: 100;
-      }
-      .user-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+        width: 100%; background: rgba(11, 16, 32, 0.9);
+        padding: 15px 25px; border-bottom: 1px solid #f2a900;
+        display: flex; align-items: center; justify-content: space-between;
+        box-sizing: border-box; position: fixed; top: 0; z-index: 100;
       }
       .user-avatar {
-        width: 35px;
-        height: 35px;
-        background: #4f86ff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 800;
-        color: #0b1020;
-        font-size: 14px;
+        width: 40px; height: 40px; background: #f2a900;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-weight: 800; color: #0b1020;
       }
-      .user-text {
-        display: flex;
-        flex-direction: column;
-      }
-      .username {
-        font-size: 16px;
-        font-weight: 700;
-        color: #facc15;
-        line-height: 1.2;
-      }
-      .status {
-        font-size: 10px;
-        opacity: 0.5;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-      .pay-btn {
-        background: linear-gradient(135deg, #4f86ff 0%, #3b82f6 100%);
-        color: #fff;
-        border: none;
-        padding: 10px 24px;
-        font-size: 15px;
-        font-weight: 700;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .pay-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-        background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-      }
-      .pay-btn:active {
-        transform: translateY(0);
-      }
+      .username { font-size: 16px; font-weight: 700; color: #f2a900; }
+      
       .main-content {
-        flex: 1;
+        flex: 1; display: flex; justify-content: center; align-items: center;
+        padding: 100px 20px 40px;
+      }
+      .card {
+        background: #1a2235; padding: 30px; border-radius: 30px;
+        border: 2px solid #f2a900; text-align: center; width: 100%; max-width: 360px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      }
+      .title-ar { font-size: 26px; color: #f2a900; margin: 5px 0; font-weight: 900; }
+      .title-ku { font-size: 22px; color: #fff; margin: 5px 0; font-weight: 700; }
+      .title-en { font-size: 18px; color: #ccc; margin: 5px 0; font-weight: 400; }
+      
+      .price { font-size: 35px; color: #f2a900; font-weight: 900; margin: 25px 0; }
+      
+      .pay-btn {
+        background: linear-gradient(135deg, #f2a900 0%, #d49400 100%);
+        color: #0b1020; border: none; padding: 18px;
+        font-size: 18px; font-weight: 800; border-radius: 15px;
+        cursor: pointer; width: 100%; transition: 0.3s;
+      }
+      .pay-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(242, 169, 0, 0.3); }
+      
+      .contact-box {
+        margin-top: 25px;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
+        gap: 15px;
+      }
+      .contact-link {
+        text-decoration: none;
+        font-size: 24px;
+        background: rgba(255, 255, 255, 0.1);
+        width: 50px;
+        height: 50px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        padding: 100px 20px 40px;
-        text-align: center;
+        border-radius: 50%;
+        transition: 0.3s;
       }
-      .hero-title {
-        font-size: clamp(32px, 8vw, 64px);
-        font-weight: 900;
-        margin: 0;
-        background: linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0.5) 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -1px;
+      .contact-link:hover { background: #f2a900; color: #0b1020; }
+
+      .location-box {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px; border-radius: 15px; margin-top: 20px;
+        font-size: 13px; line-height: 1.8; text-align: center;
       }
-      .hero-subtitle {
-        font-size: clamp(16px, 4vw, 20px);
-        opacity: 0.6;
-        margin-top: 15px;
-        max-width: 600px;
-        line-height: 1.6;
-      }
-      .support-card {
-        margin-top: 50px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 30px;
-        border-radius: 30px;
-        backdrop-filter: blur(5px);
-      }
-      .pi-icon {
-        font-size: 40px;
-        margin-bottom: 10px;
-        display: block;
-      }
+      .lang-label { color: #f2a900; font-weight: bold; margin-left: 5px; }
     </style>
   </head>
   <body>
     <header>
-      <div class="user-info">
-        <div class="user-avatar" id="userAvatar">?</div>
-        <div class="user-text">
-          <div id="usernameDisplay" class="username">Guest</div>
-          <div id="statusDisplay" class="status">Connecting...</div>
-        </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="user-avatar" id="userAvatar">؟</div>
+        <div id="usernameDisplay" class="username">جاري الاتصال...</div>
       </div>
-      <button id="payBtn" class="pay-btn">
-        <span>Support 1 Pi</span>
-      </button>
     </header>
     
     <main class="main-content">
-      <!-- Empty main content as requested -->
+      <div class="card">
+        <div style="font-size: 50px; margin-bottom: 10px;">📱</div>
+        
+        <div class="title-ar">أبو سراج فون</div>
+        <div class="title-ku">بابێ سراج</div>
+        <div class="title-en">Abu Seraj Phone</div>
+        
+        <hr style="border: 0.5px solid #333; margin: 20px 0;">
+        
+        <h3 style="margin-bottom: 0;">iPhone 15 Pro Max</h3>
+        <div class="price">10 Pi</div>
+        
+        <button id="payBtn" class="pay-btn">إتمام الشراء | کڕین | Buy Now</button>
+
+        <div class="contact-box">
+          <a href="https://wa.me/9647515037922" class="contact-link" title="WhatsApp">💬</a>
+          <a href="https://t.me/+9647515037922" class="contact-link" title="Telegram">✈️</a>
+          <a href="viber://chat?number=9647515037922" class="contact-link" title="Viber">💜</a>
+        </div>
+
+        <div class="location-box">
+            <div><span class="lang-label">العربية:</span> كوردستان العراق - دهوك - عقرة</div>
+            <div><span class="lang-label">كوردى:</span> كوردستانا عيراقێ - دهۆك - ئاكرێ</div>
+            <div><span class="lang-label">English:</span> Kurdistan Iraq - Duhok - Akre</div>
+        </div>
+      </div>
     </main>
 
     <script>
-      (function() {
-        async function postJson(url, body) {
-          const r = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body || {}),
+      const Pi = window.Pi;
+      Pi.init({ version: "2.0", sandbox: true });
+
+      async function initApp() {
+        try {
+          const auth = await Pi.authenticate(["username", "payments"], (incomplete) => {
+            console.log("Incomplete payment:", incomplete);
           });
-          const txt = await r.text();
-          return { ok: r.ok, status: r.status, text: txt };
-        }
+          
+          document.getElementById('usernameDisplay').textContent = auth.user.username;
+          document.getElementById('userAvatar').textContent = auth.user.username.charAt(0).toUpperCase();
 
-        async function initPay() {
-          const userEl = document.getElementById('usernameDisplay');
-          const statusEl = document.getElementById('statusDisplay');
-          const btn = document.getElementById('payBtn');
-
-          if (!window.Pi) {
-            statusEl.textContent = "Pi SDK not found";
-            return;
-          }
-
-          try {
-            statusEl.textContent = "Authenticating...";
-            const auth = await window.Pi.authenticate(["username", "payments"], function(incomplete) {
-               console.log("Incomplete payment found", incomplete);
-            });
-            
-            const username = auth.user.username;
-            document.getElementById('userAvatar').textContent = username.charAt(0).toUpperCase();
-            userEl.textContent = username;
-            statusEl.textContent = "Ready";
-
-            btn.onclick = async () => {
-              try {
-                statusEl.textContent = "Creating payment...";
-                const paymentData = {
-                  amount: 1.0,
-                  memo: "Support Developer",
-                  metadata: { kind: "support" }
-                };
-
-                const callbacks = {
-                  onReadyForServerApproval: (id) => {
-                    statusEl.textContent = "Approving...";
-                    postJson("/.netlify/functions/pi-approve", { paymentId: id, accessToken: auth.accessToken })
-                      .then(res => statusEl.textContent = res.ok ? "Approved" : "Approve failed");
-                  },
-                  onReadyForServerCompletion: (id, txid) => {
-                    statusEl.textContent = "Completing...";
-                    postJson("/.netlify/functions/pi-complete", { paymentId: id, txid, accessToken: auth.accessToken })
-                      .then(res => statusEl.textContent = res.ok ? "Done! Thank you." : "Complete failed");
-                  },
-                  onCancel: () => statusEl.textContent = "Cancelled",
-                  onError: (err) => statusEl.textContent = "Error: " + err.message
-                };
-
-                window.Pi.createPayment(paymentData, callbacks);
-              } catch (e) {
-                statusEl.textContent = "Failed: " + e.message;
-              }
+          document.getElementById('payBtn').onclick = async () => {
+            const paymentData = {
+              amount: 10,
+              memo: "iPhone 15 Pro Max - Abu Seraj Phone",
+              metadata: { item: "iPhone 15 Pro Max" }
             };
-          } catch (e) {
-            statusEl.textContent = "Auth failed: " + e.message;
-          }
+
+            const callbacks = {
+              onReadyForServerApproval: (id) => { console.log("Approved"); },
+              onReadyForServerCompletion: (id, txid) => { alert("تمت العملية بنجاح! | سەرکەوتوو بوو!"); },
+              onCancel: () => { console.log("Cancelled"); },
+              onError: (err) => { alert("Error: " + err.message); }
+            };
+
+            Pi.createPayment(paymentData, callbacks);
+          };
+        } catch (e) {
+          console.error(e);
         }
-        
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", initPay);
-        } else {
-          initPay();
-        }
-      })();
+      }
+      initApp();
     </script>
   </body>
 </html>
