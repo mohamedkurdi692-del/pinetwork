@@ -1,29 +1,255 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pi Payment</title>
+    <title>متجر أبو سراج - Pi Payment</title>
+    <!-- Pi SDK -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <!-- Google Fonts for Modern Arabic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        body { background: #0b1020; color: white; text-align: center; font-family: sans-serif; padding-top: 50px; }
-        .btn { background: #4f86ff; color: white; padding: 20px; border-radius: 10px; font-size: 20px; border: none; cursor: pointer; width: 80%; }
+        :root {
+            --bg-color: #0d0914;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --pi-purple: #e024a5;
+            --pi-purple-dark: #6b0f80;
+            --pi-gold: #f3ba2f;
+            --text-main: #ffffff;
+            --text-muted: #a0aec0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #2d0b5a 0%, var(--bg-color) 60%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background glow */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--pi-purple);
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--pi-gold), #e07a1e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            box-shadow: 0 8px 20px rgba(243, 186, 47, 0.3);
+            font-size: 28px;
+            color: #1a0b2e;
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .user-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--pi-gold);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--pi-gold);
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: right;
+        }
+
+        .product-title {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .price-tag {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 12px;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .price-amount {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--pi-gold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: linear-gradient(135deg, var(--pi-purple), var(--pi-purple-dark));
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(224, 36, 165, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(224, 36, 165, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-pay:active {
+            transform: translateY(0);
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
     </style>
 </head>
 <body>
-    <h1>متجر أبو سراج</h1>
-    <p id="status">جاري الاتصال...</p>
-    <button id="payBtn" class="btn">دفع 1 Pi لإتمام المهمة</button>
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="logo-icon">π</div>
+            <h1 class="title">متجر أبو سراج</h1>
+            <div class="user-status-badge">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="status">جاري الاتصال...</span>
+            </div>
+        </div>
+
+        <!-- Product / Task Card -->
+        <div class="product-card">
+            <div class="product-title">الطلب المريح:</div>
+            <div class="product-name">إتمام المهمة 10</div>
+            <div class="price-tag">
+                <span class="price-label">المبلغ المطلوب:</span>
+                <span class="price-amount">1.00 <span style="font-size: 16px;">π</span></span>
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        <button id="payBtn" class="btn-pay">
+            <i class="fa-solid fa-wallet"></i>
+            دفع الآن بواسطة Pi
+        </button>
+
+        <!-- Footer -->
+        <div class="footer-note">
+            <i class="fa-solid fa-shield-halved"></i>
+            معاملة آمنة ومشفرة عبر شبكة Pi Network
+        </div>
+    </div>
 
     <script>
+        // Pi SDK Initialization
         window.Pi.init({ version: "2.0", sandbox: false });
         
         async function setup() {
+            const statusElem = document.getElementById('status');
+            const statusDot = document.getElementById('statusDot');
+            
             try {
                 const auth = await window.Pi.authenticate(['username', 'payments']);
-                document.getElementById('status').innerText = "مرحباً: " + auth.user.username;
+                statusElem.innerText = "مرحباً، " + auth.user.username;
+                statusDot.style.backgroundColor = "#4caf50"; // أخضر عند نجاح الاتصال
+                statusDot.style.boxShadow = "0 0 8px #4caf50";
             } catch (e) {
-                document.getElementById('status').innerText = "اضغط على الزر للدفع";
+                statusElem.innerText = "اضغط على الزر للدفع";
             }
         }
 
@@ -34,11 +260,12 @@
                 metadata: { item: "test" }
             }, {
                 onReadyForServerApproval: (id) => console.log("Approved", id),
-                onReadyForServerCompletion: (id, txid) => alert("تم الدفع بنجاح!"),
-                onCancel: () => alert("تم الإلغاء"),
+                onReadyForServerCompletion: (id, txid) => alert("🎉 تم الدفع بنجاح!"),
+                onCancel: () => alert("تم إلغاء عملية الدفع."),
                 onError: (err) => alert("خطأ: " + err.message)
             });
         };
+
         setup();
     </script>
 </body>
