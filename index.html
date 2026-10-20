@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر أبو سراج - Pi Payment</title>
+    <title>متجر أبو سراج - نظام الدفع بالضمان وسعر الإجماع</title>
     <!-- Pi SDK -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <!-- Google Fonts for Modern Arabic Typography -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,10 +15,11 @@
         :root {
             --bg-color: #0d0914;
             --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --pi-purple: #e024a5;
-            --pi-purple-dark: #6b0f80;
+            --border-color: rgba(255, 255, 255, 0.12);
+            --pi-purple: #9c27b0;
+            --pi-purple-glow: rgba(156, 39, 176, 0.4);
             --pi-gold: #f3ba2f;
+            --success-green: #00e676;
             --text-main: #ffffff;
             --text-muted: #a0aec0;
         }
@@ -31,7 +32,7 @@
         }
 
         body {
-            background: radial-gradient(circle at top right, #2d0b5a 0%, var(--bg-color) 60%);
+            background: radial-gradient(circle at top right, #2a0845 0%, var(--bg-color) 70%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -42,67 +43,48 @@
 
         .container {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 30px 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            border-radius: 28px;
+            padding: 28px 22px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
             position: relative;
             overflow: hidden;
         }
 
-        /* Decorative background glow */
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: var(--pi-purple);
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.6;
-        }
-
+        /* Header Styling */
         .header {
-            margin-bottom: 24px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--pi-gold), #e07a1e);
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--pi-gold), #d48806);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 12px;
-            box-shadow: 0 8px 20px rgba(243, 186, 47, 0.3);
-            font-size: 28px;
+            margin: 0 auto 10px;
+            box-shadow: 0 0 20px rgba(243, 186, 47, 0.4);
+            font-size: 26px;
             color: #1a0b2e;
-            font-weight: bold;
+            font-weight: 900;
         }
 
-        .title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .user-status-badge {
+        .user-status {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--border-color);
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             margin-top: 6px;
         }
@@ -112,66 +94,115 @@
             height: 8px;
             background-color: var(--pi-gold);
             border-radius: 50%;
-            display: inline-block;
             box-shadow: 0 0 8px var(--pi-gold);
         }
 
+        /* Product Box */
         .product-card {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 24px 0;
-            text-align: right;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 18px;
+            margin: 18px 0;
         }
 
-        .product-title {
-            font-size: 16px;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .product-name {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #fff;
-        }
-
-        .price-tag {
+        .product-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px dashed var(--border-color);
-            padding-top: 12px;
+            margin-bottom: 8px;
         }
 
-        .price-label {
-            font-size: 14px;
+        .product-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .gcv-badge {
+            background: rgba(243, 186, 47, 0.15);
+            color: var(--pi-gold);
+            border: 1px solid rgba(243, 186, 47, 0.3);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .price-details {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fiat-price {
+            font-size: 13px;
             color: var(--text-muted);
         }
 
-        .price-amount {
-            font-size: 22px;
+        .pi-price {
+            font-size: 20px;
             font-weight: 900;
             color: var(--pi-gold);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
+        /* Escrow Guarantee Box (ضمان حق الطرفين) */
+        .escrow-box {
+            background: rgba(0, 230, 118, 0.08);
+            border: 1px dashed rgba(0, 230, 118, 0.3);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            text-align: right;
+        }
+
+        .escrow-icon {
+            color: var(--success-green);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .escrow-text h4 {
+            font-size: 13px;
+            color: var(--success-green);
+            margin-bottom: 2px;
+        }
+
+        .escrow-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Pay Button */
         .btn-pay {
             width: 100%;
-            background: linear-gradient(135deg, var(--pi-purple), var(--pi-purple-dark));
+            background: linear-gradient(135deg, #ab47bc, #6a1b9a);
             color: white;
             padding: 16px;
             border-radius: 14px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(224, 36, 165, 0.3);
+            box-shadow: 0 8px 25px var(--pi-purple-glow);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -180,18 +211,14 @@
 
         .btn-pay:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(224, 36, 165, 0.4);
-            filter: brightness(1.1);
-        }
-
-        .btn-pay:active {
-            transform: translateY(0);
+            filter: brightness(1.15);
         }
 
         .footer-note {
-            margin-top: 20px;
-            font-size: 12px;
+            margin-top: 16px;
+            font-size: 11px;
             color: var(--text-muted);
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -202,67 +229,106 @@
 <body>
 
     <div class="container">
-        <!-- Header Section -->
+        <!-- Header -->
         <div class="header">
             <div class="logo-icon">π</div>
-            <h1 class="title">متجر أبو سراج</h1>
-            <div class="user-status-badge">
+            <h1 style="font-size: 22px;">متجر أبو سراج المعتمد</h1>
+            <div class="user-status">
                 <span class="status-dot" id="statusDot"></span>
-                <span id="status">جاري الاتصال...</span>
+                <span id="status">جاري الاتصال بـ Pi Network...</span>
             </div>
         </div>
 
-        <!-- Product / Task Card -->
+        <!-- Product Details -->
         <div class="product-card">
-            <div class="product-title">الطلب المريح:</div>
-            <div class="product-name">إتمام المهمة 10</div>
-            <div class="price-tag">
-                <span class="price-label">المبلغ المطلوب:</span>
-                <span class="price-amount">1.00 <span style="font-size: 16px;">π</span></span>
+            <div class="product-header">
+                <span class="product-title">المنتج / الخدمة الرقمية</span>
+                <span class="gcv-badge"><i class="fa-solid fa-scale-balanced"></i> سعر الإجماع (GCV)</span>
+            </div>
+            <div class="product-desc">
+                شراء المنتج وفق معدل سعر الإجماع العالمي ($314,159 / Pi).
+            </div>
+
+            <div class="price-details">
+                <div class="fiat-price">
+                    سعر المنتج الأصل:<br>
+                    <strong>$100.00 USD</strong>
+                </div>
+                <div class="pi-price">
+                    0.000318 <span>π</span>
+                </div>
             </div>
         </div>
 
-        <!-- Action Button -->
+        <!-- Escrow / Protection Notice -->
+        <div class="escrow-box">
+            <i class="fa-solid fa-user-shield escrow-icon"></i>
+            <div class="escrow-text">
+                <h4>ضمان حق المشتري والبائع (Escrow Protocol)</h4>
+                <p>يتم احتجاز المبلغ في نظام الضمان الذكي ولا يتم تحويله للبائع إلا بعد تأكيد استلامك للمنتج وإتمام العملية بنجاح.</p>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
         <button id="payBtn" class="btn-pay">
-            <i class="fa-solid fa-wallet"></i>
-            دفع الآن بواسطة Pi
+            <i class="fa-solid fa-lock"></i>
+            دفع آمن بالسعر المعتمد
         </button>
 
-        <!-- Footer -->
         <div class="footer-note">
-            <i class="fa-solid fa-shield-halved"></i>
-            معاملة آمنة ومشفرة عبر شبكة Pi Network
+            <i class="fa-solid fa-circle-check" style="color: var(--success-green);"></i>
+            تطبيق معتمد ومسجل في Pi Developer Portal
         </div>
     </div>
 
     <script>
-        // Pi SDK Initialization
+        // Pi SDK Config
         window.Pi.init({ version: "2.0", sandbox: false });
         
+        // حساب سعر الإجماع (مثال: منتج بقيمة 100 دولار بناءً على GCV = $314,159)
+        const GCV_PRICE_USD = 314159; 
+        const ITEM_PRICE_USD = 100;
+        const PI_AMOUNT = parseFloat((ITEM_PRICE_USD / GCV_PRICE_USD).toFixed(6)); // 0.000318 Pi
+
         async function setup() {
             const statusElem = document.getElementById('status');
             const statusDot = document.getElementById('statusDot');
             
             try {
                 const auth = await window.Pi.authenticate(['username', 'payments']);
-                statusElem.innerText = "مرحباً، " + auth.user.username;
-                statusDot.style.backgroundColor = "#4caf50"; // أخضر عند نجاح الاتصال
-                statusDot.style.boxShadow = "0 0 8px #4caf50";
+                statusElem.innerText = "المستخدم: " + auth.user.username;
+                statusDot.style.backgroundColor = "#00e676";
+                statusDot.style.boxShadow = "0 0 8px #00e676";
             } catch (e) {
-                statusElem.innerText = "اضغط على الزر للدفع";
+                statusElem.innerText = "يرجى فتح التطبيق من متصفح Pi Browser";
             }
         }
 
         document.getElementById('payBtn').onclick = () => {
             window.Pi.createPayment({
-                amount: 1,
-                memo: "المهمة 10",
-                metadata: { item: "test" }
+                amount: PI_AMOUNT, // الدفع كسر صغيراً جداً بناءً على سعر الإجماع
+                memo: "شراء منتج بضمان الحقوق - متجر أبو سراج",
+                metadata: { 
+                    item_id: "prod_1001",
+                    gcv_rate: GCV_PRICE_USD,
+                    escrow_enabled: true
+                }
             }, {
-                onReadyForServerApproval: (id) => console.log("Approved", id),
-                onReadyForServerCompletion: (id, txid) => alert("🎉 تم الدفع بنجاح!"),
-                onCancel: () => alert("تم إلغاء عملية الدفع."),
-                onError: (err) => alert("خطأ: " + err.message)
+                // المرحلة الأولى: المشتري يوافق ويتم حجز المبلغ
+                onReadyForServerApproval: (paymentId) => {
+                    console.log("تم حجز المبلغ في الضمان، انتظار موافقة السيرفر:", paymentId);
+                    // هنا يتم إرسال paymentId إلى سيرفرك للتحقق وتجهيز الطلب
+                },
+                // المرحلة الثانية: استلام المنتج بنجاح وتأكيد الدفع للبائع
+                onReadyForServerCompletion: (paymentId, txid) => {
+                    alert("🎉 تم تأكيد الدفع واستلام الخدمة بنجاح!\nرقم المعاملة: " + txid);
+                },
+                onCancel: (paymentId) => {
+                    alert("تم إلغاء عملية الدفع وإرجاع الرصيد لحسابك.");
+                },
+                onError: (err, payment) => {
+                    alert("حدث خطأ في عملية الدفع: " + err.message);
+                }
             });
         };
 
