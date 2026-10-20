@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر أبو سراج - نظام الدفع بالضمان وسعر الإجماع</title>
+    <title>ABU SERAJ PHONE - سعر الإجماع والضمان</title>
     <!-- Pi SDK -->
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <!-- Google Fonts -->
@@ -13,15 +13,17 @@
 
     <style>
         :root {
-            --bg-color: #0d0914;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.12);
-            --pi-purple: #9c27b0;
-            --pi-purple-glow: rgba(156, 39, 176, 0.4);
-            --pi-gold: #f3ba2f;
-            --success-green: #00e676;
-            --text-main: #ffffff;
-            --text-muted: #a0aec0;
+            --bg-color: #f7f9fc;
+            --card-bg: #ffffff;
+            --escrow-bg: #eefbf4;
+            --escrow-border: #d2f4e1;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --text-kurdi: #607d8b;
+            --primary-green: #10b981;
+            --primary-green-hover: #059669;
+            --pi-color: #0f172a;
+            --gcv-gold: #b45309;
         }
 
         * {
@@ -32,263 +34,267 @@
         }
 
         body {
-            background: radial-gradient(circle at top right, #2a0845 0%, var(--bg-color) 70%);
-            color: var(--text-main);
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             min-height: 100vh;
+            padding: 16px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
         }
 
-        .container {
+        .app-container {
             width: 100%;
-            max-width: 440px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 28px;
-            padding: 28px 22px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
-            position: relative;
-            overflow: hidden;
+            max-width: 480px;
+            margin: 0 auto;
         }
 
-        /* Header Styling */
-        .header {
+        /* Top Header Status */
+        .top-bar {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        .logo-icon {
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(135deg, var(--pi-gold), #d48806);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            box-shadow: 0 0 20px rgba(243, 186, 47, 0.4);
-            font-size: 26px;
-            color: #1a0b2e;
-            font-weight: 900;
-        }
-
-        .user-status {
+        .user-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--border-color);
-            padding: 5px 14px;
+            gap: 6px;
+            background: #ffffff;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 13px;
             color: var(--text-muted);
-            margin-top: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background-color: var(--pi-gold);
+            background-color: #f59e0b;
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--pi-gold);
         }
 
-        /* Product Box */
-        .product-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
+        /* Escrow Banner (نظام الضمان) */
+        .escrow-card {
+            background-color: var(--escrow-bg);
+            border: 1px solid var(--escrow-border);
+            border-radius: 20px;
             padding: 18px;
-            margin: 18px 0;
+            margin-bottom: 24px;
         }
 
-        .product-header {
+        .escrow-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .product-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .gcv-badge {
-            background: rgba(243, 186, 47, 0.15);
-            color: var(--pi-gold);
-            border: 1px solid rgba(243, 186, 47, 0.3);
-            padding: 3px 8px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .product-desc {
-            font-size: 13px;
-            color: var(--text-muted);
+            gap: 8px;
+            font-size: 17px;
+            font-weight: 800;
+            color: #065f46;
             margin-bottom: 14px;
-            line-height: 1.5;
         }
 
-        .price-details {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .escrow-item {
+            margin-bottom: 12px;
         }
 
-        .fiat-price {
-            font-size: 13px;
-            color: var(--text-muted);
+        .escrow-item:last-child {
+            margin-bottom: 0;
         }
 
-        .pi-price {
-            font-size: 20px;
-            font-weight: 900;
-            color: var(--pi-gold);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Escrow Guarantee Box (ضمان حق الطرفين) */
-        .escrow-box {
-            background: rgba(0, 230, 118, 0.08);
-            border: 1px dashed rgba(0, 230, 118, 0.3);
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            text-align: right;
-        }
-
-        .escrow-icon {
-            color: var(--success-green);
-            font-size: 20px;
-            margin-top: 2px;
-        }
-
-        .escrow-text h4 {
-            font-size: 13px;
-            color: var(--success-green);
+        .escrow-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #047857;
             margin-bottom: 2px;
         }
 
-        .escrow-text p {
-            font-size: 11px;
-            color: var(--text-muted);
+        .escrow-desc-ar {
+            font-size: 13px;
+            color: #1f2937;
             line-height: 1.4;
         }
 
-        /* Pay Button */
-        .btn-pay {
-            width: 100%;
-            background: linear-gradient(135deg, #ab47bc, #6a1b9a);
-            color: white;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 17px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px var(--pi-purple-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .escrow-desc-ku {
+            font-size: 12px;
+            color: var(--text-kurdi);
+            margin-top: 3px;
+            line-height: 1.4;
+            direction: rtl;
         }
 
-        .btn-pay:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.15);
-        }
-
-        .footer-note {
-            margin-top: 16px;
-            font-size: 11px;
-            color: var(--text-muted);
+        /* Section Title */
+        .section-title {
             text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .phone-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .phone-specs {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        /* GCV Tag */
+        .gcv-tag {
+            font-size: 10px;
+            background: #fef3c7;
+            color: var(--gcv-gold);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .phone-price {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--pi-color);
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
+        }
+
+        .btn-buy {
+            width: 100%;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px 4px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-buy:hover {
+            background-color: var(--primary-green-hover);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo-icon">π</div>
-            <h1 style="font-size: 22px;">متجر أبو سراج المعتمد</h1>
-            <div class="user-status">
+    <div class="app-container">
+        <!-- User Status -->
+        <div class="top-bar">
+            <div class="user-badge">
                 <span class="status-dot" id="statusDot"></span>
-                <span id="status">جاري الاتصال بـ Pi Network...</span>
+                <span id="status">جاري الاتصال بحساب Pi...</span>
             </div>
         </div>
 
-        <!-- Product Details -->
-        <div class="product-card">
-            <div class="product-header">
-                <span class="product-title">المنتج / الخدمة الرقمية</span>
-                <span class="gcv-badge"><i class="fa-solid fa-scale-balanced"></i> سعر الإجماع (GCV)</span>
-            </div>
-            <div class="product-desc">
-                شراء المنتج وفق معدل سعر الإجماع العالمي ($314,159 / Pi).
+        <!-- Escrow Box -->
+        <div class="escrow-card">
+            <div class="escrow-header">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>نظام ضمان البيع والشراء الآمن (Escrow):[span_1](start_span)[span_1](end_span)</span>
             </div>
 
-            <div class="price-details">
-                <div class="fiat-price">
-                    سعر المنتج الأصل:<br>
-                    <strong>$100.00 USD</strong>
+            <!-- Buyer Protection -->
+            <div class="escrow-item">
+                <div class="escrow-title">• حماية المشتري:[span_2](start_span)[span_2](end_span)</div>
+                <div class="escrow-desc-ar">لا يتم تحرير الـ Pi نهائياً للبائع إلا بعد استلامك للهاتف ومعاينته والتأكد من مطابقة المواصفات خلال 48 ساعة.[span_3](start_span)[span_3](end_span)</div>
+                <div class="escrow-desc-ku">پاراستنی كڕیار: پی ناكرێتە پارەی فرۆشیار تا ئەو كاتەی مۆبایلەكەت وەردەگریت و پشكنینی بۆ دەكەیت لە ماوەی ٤٨ كاتژمێردا.[span_4](start_span)[span_4](end_span)</div>
+            </div>
+
+            <!-- Seller Protection -->
+            <div class="escrow-item" style="margin-top: 10px;">
+                <div class="escrow-title">• حماية البائع:[span_5](start_span)[span_5](end_span)</div>
+                <div class="escrow-desc-ar">يلتزم المشتري بتأكيد الدفع مسبقاً وتجميده في عقد الشبكة قبل البدء في شحن وتجهيز الطلب لضمان جدية الشراء.[span_6](start_span)[span_6](end_span)</div>
+                <div class="escrow-desc-ku">پاراستنی فرۆشیار: كڕیار پابەندە بە پشتڕاستكردنەوەی پارەدان بە پێشوەختە بۆ دلنیابوون لە جدیەتی كڕین.[span_7](start_span)[span_7](end_span)</div>
+            </div>
+
+            <!-- Support -->
+            <div class="escrow-item" style="margin-top: 10px;">
+                <div class="escrow-title">• الدعم وحل النزاعات:[span_8](start_span)[span_8](end_span)</div>
+                <div class="escrow-desc-ar">في حال وجود أي مشكلة في الشحن أو الجهاز، يمكنك فتح تذكرة دعم لاسترجاع عملاتك بالكامل.[span_9](start_span)[span_9](end_span)</div>
+                <div class="escrow-desc-ku">پشتیوانی: لە ئەگەری هەر كێشەیەك لە گەیاندن یان مۆبایلەكە، دەتوانیت سكاڵا تۆمار بكەیت بۆ وەرگرتنەوەی تەواوی پارەكەت.[span_10](start_span)[span_10](end_span)</div>
+            </div>
+        </div>
+
+        <!-- Section Header -->
+        <h2 class="section-title">الأجهزة المتاحة للطلب الآن[span_11](start_span)[span_11](end_span)</h2>
+        <p class="section-subtitle">مسعرة وفق سعر الإجماع العالمي ($314,159 GCV)</p>
+
+        <!-- Products List -->
+        <div class="products-grid">
+            <!-- Samsung S24 Ultra -->
+            <div class="product-card">
+                <div>
+                    <div class="phone-title">Samsung S24 Ultra</div>
+                    <div class="phone-specs">ذاكرة 512GB</div>
+                    <span class="gcv-tag">سعر إجماع ($1400)</span>
                 </div>
-                <div class="pi-price">
-                    0.000318 <span>π</span>
+                <div>
+                    <div class="phone-price" id="samsungPrice">... Pi</div>
+                    <button class="btn-buy" onclick="buyPhone('Samsung S24 Ultra', 1400)">شراء وضمان استلام</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Escrow / Protection Notice -->
-        <div class="escrow-box">
-            <i class="fa-solid fa-user-shield escrow-icon"></i>
-            <div class="escrow-text">
-                <h4>ضمان حق المشتري والبائع (Escrow Protocol)</h4>
-                <p>يتم احتجاز المبلغ في نظام الضمان الذكي ولا يتم تحويله للبائع إلا بعد تأكيد استلامك للمنتج وإتمام العملية بنجاح.</p>
+            <!-- iPhone 15 Pro -->
+            <div class="product-card">
+                <div>
+                    <div class="phone-title">iPhone 15 Pro</div>
+                    <div class="phone-specs">ذاكرة 256GB</div>
+                    <span class="gcv-tag">سعر إجماع ($1200)</span>
+                </div>
+                <div>
+                    <div class="phone-price" id="iphonePrice">... Pi</div>
+                    <button class="btn-buy" onclick="buyPhone('iPhone 15 Pro', 1200)">شراء وضمان استلام</button>
+                </div>
             </div>
-        </div>
-
-        <!-- Submit Button -->
-        <button id="payBtn" class="btn-pay">
-            <i class="fa-solid fa-lock"></i>
-            دفع آمن بالسعر المعتمد
-        </button>
-
-        <div class="footer-note">
-            <i class="fa-solid fa-circle-check" style="color: var(--success-green);"></i>
-            تطبيق معتمد ومسجل في Pi Developer Portal
         </div>
     </div>
 
     <script>
-        // Pi SDK Config
+        // Pi Network SDK Setup
         window.Pi.init({ version: "2.0", sandbox: false });
         
-        // حساب سعر الإجماع (مثال: منتج بقيمة 100 دولار بناءً على GCV = $314,159)
-        const GCV_PRICE_USD = 314159; 
-        const ITEM_PRICE_USD = 100;
-        const PI_AMOUNT = parseFloat((ITEM_PRICE_USD / GCV_PRICE_USD).toFixed(6)); // 0.000318 Pi
+        // حساب سعر الإجماع بناءً على GCV = $314,159
+        const GCV_RATE = 314159;
+
+        function calculatePiPrice(usdPrice) {
+            return parseFloat((usdPrice / GCV_RATE).toFixed(6));
+        }
+
+        // عرض الأسعار المحسوبة تلقائياً بالاعتماد على سعر الإجماع في الواجهة
+        document.getElementById('samsungPrice').innerText = calculatePiPrice(1400) + " π";
+        document.getElementById('iphonePrice').innerText = calculatePiPrice(1200) + " π";
 
         async function setup() {
             const statusElem = document.getElementById('status');
@@ -296,41 +302,35 @@
             
             try {
                 const auth = await window.Pi.authenticate(['username', 'payments']);
-                statusElem.innerText = "المستخدم: " + auth.user.username;
-                statusDot.style.backgroundColor = "#00e676";
-                statusDot.style.boxShadow = "0 0 8px #00e676";
+                statusElem.innerText = "مرحباً: " + auth.user.username;
+                statusDot.style.backgroundColor = "#10b981";
             } catch (e) {
-                statusElem.innerText = "يرجى فتح التطبيق من متصفح Pi Browser";
+                statusElem.innerText = "يرجى الفتح من تطبيق Pi Browser";
             }
         }
 
-        document.getElementById('payBtn').onclick = () => {
+        function buyPhone(model, usdPrice) {
+            const piAmount = calculatePiPrice(usdPrice);
+
             window.Pi.createPayment({
-                amount: PI_AMOUNT, // الدفع كسر صغيراً جداً بناءً على سعر الإجماع
-                memo: "شراء منتج بضمان الحقوق - متجر أبو سراج",
-                metadata: { 
-                    item_id: "prod_1001",
-                    gcv_rate: GCV_PRICE_USD,
-                    escrow_enabled: true
-                }
+                amount: piAmount,
+                memo: "شراء جهاز " + model + " بسعر الإجماع وعقد الضمان",
+                metadata: { model: model, usd_value: usdPrice, gcv_rate: GCV_RATE }
             }, {
-                // المرحلة الأولى: المشتري يوافق ويتم حجز المبلغ
                 onReadyForServerApproval: (paymentId) => {
-                    console.log("تم حجز المبلغ في الضمان، انتظار موافقة السيرفر:", paymentId);
-                    // هنا يتم إرسال paymentId إلى سيرفرك للتحقق وتجهيز الطلب
+                    console.log("تم حجز المبلغ بالضمان:", paymentId);
                 },
-                // المرحلة الثانية: استلام المنتج بنجاح وتأكيد الدفع للبائع
                 onReadyForServerCompletion: (paymentId, txid) => {
-                    alert("🎉 تم تأكيد الدفع واستلام الخدمة بنجاح!\nرقم المعاملة: " + txid);
+                    alert("🎉 تم تأكيد طلبك وجاري شحن الجهاز بنجاح!\nرقم المعاملة: " + txid);
                 },
                 onCancel: (paymentId) => {
-                    alert("تم إلغاء عملية الدفع وإرجاع الرصيد لحسابك.");
+                    alert("تم إلغاء عملية الدفع.");
                 },
                 onError: (err, payment) => {
-                    alert("حدث خطأ في عملية الدفع: " + err.message);
+                    alert("حدث خطأ في الدفع: " + err.message);
                 }
             });
-        };
+        }
 
         setup();
     </script>
