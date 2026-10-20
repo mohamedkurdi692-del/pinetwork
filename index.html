@@ -46,11 +46,14 @@
             width: 100%;
             max-width: 480px;
             margin: 0 auto;
+            position: relative;
         }
 
-        /* Top Header Status */
+        /* Top Header Bar */
         .top-bar {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 16px;
         }
 
@@ -71,6 +74,26 @@
             height: 8px;
             background-color: #f59e0b;
             border-radius: 50%;
+        }
+
+        .admin-btn {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .admin-btn:hover {
+            background: #f1f5f9;
         }
 
         /* Escrow Banner (نظام الضمان) */
@@ -205,51 +228,131 @@
         .btn-buy:hover {
             background-color: var(--primary-green-hover);
         }
+
+        /* Admin Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            text-align: right;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .btn-save {
+            flex: 1;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-close {
+            flex: 1;
+            background: #e2e8f0;
+            color: var(--text-dark);
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- User Status -->
+        <!-- Top Bar -->
         <div class="top-bar">
             <div class="user-badge">
                 <span class="status-dot" id="statusDot"></span>
                 <span id="status">جاري الاتصال بحساب Pi...</span>
             </div>
+            <!-- زر لوحة تحكم تغيير الأسعار -->
+            <button class="admin-btn" onclick="openAdminModal()" title="تعديل الأسعار">
+                <i class="fa-solid fa-gear"></i>
+            </button>
         </div>
 
         <!-- Escrow Box -->
         <div class="escrow-card">
             <div class="escrow-header">
                 <i class="fa-solid fa-shield-halved"></i>
-                <span>نظام ضمان البيع والشراء الآمن (Escrow):[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span)</span>
+                <span>نظام ضمان البيع والشراء الآمن (Escrow):</span>
             </div>
 
-            <!-- Buyer Protection -->
             <div class="escrow-item">
-                <div class="escrow-title">• حماية المشتري:[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)</div>
-                <div class="escrow-desc-ar">لا يتم تحرير الـ Pi نهائياً للبائع إلا بعد استلامك للهاتف ومعاينته والتأكد من مطابقة المواصفات خلال 48 ساعة.[span_6](start_span)[span_6](end_span)[span_7](start_span)[span_7](end_span)</div>
-                <div class="escrow-desc-ku">پاراستنی كڕیار: پی ناكرێتە پارەی فرۆشیار تا ئەو كاتەی مۆبایلەكەت وەردەگریت و پشكنینی بۆ دەكەیت لە ماوەی ٤٨ كاتژمێردا.[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span)</div>
+                <div class="escrow-title">• حماية المشتري:</div>
+                <div class="escrow-desc-ar">لا يتم تحرير الـ Pi نهائياً للبائع إلا بعد استلامك للهاتف ومعاينته والتأكد من مطابقة المواصفات خلال 48 ساعة.</div>
+                <div class="escrow-desc-ku">پاراستنی كڕیار: پی ناكرێتە پارەی فرۆشیار تا ئەو كاتەی مۆبایلەكەت وەردەگریت و پشكنینی بۆ دەكەیت لە ماوەی ٤٨ كاتژمێردا.</div>
             </div>
 
-            <!-- Seller Protection -->
             <div class="escrow-item" style="margin-top: 10px;">
-                <div class="escrow-title">• حماية البائع:[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span)</div>
-                <div class="escrow-desc-ar">يلتزم المشتري بتأكيد الدفع مسبقاً وتجميده في عقد الشبكة قبل البدء في شحن وتجهيز الطلب لضمان جدية الشراء.[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span)</div>
-                <div class="escrow-desc-ku">پاراستنی فرۆشیار: كڕیار پابەندە بە پشتڕاستكردنەوەی پارەدان بە پێشوەختە بۆ دلنیابوون لە جدیەتی كڕین.[span_14](start_span)[span_14](end_span)[span_15](start_span)[span_15](end_span)</div>
+                <div class="escrow-title">• حماية البائع:</div>
+                <div class="escrow-desc-ar">يلتزم المشتري بتأكيد الدفع مسبقاً وتجميده في عقد الشبكة قبل البدء في شحن وتجهيز الطلب لضمان جدية الشراء.</div>
+                <div class="escrow-desc-ku">پاراستنی فرۆشیار: كڕیار پابەندە بە پشتڕاستكردنەوەی پارەدان بە پێشوەختە بۆ دلنیابوون لە جدیەتی كڕین.</div>
             </div>
 
-            <!-- Support -->
             <div class="escrow-item" style="margin-top: 10px;">
-                <div class="escrow-title">• الدعم وحل النزاعات:[span_16](start_span)[span_16](end_span)[span_17](start_span)[span_17](end_span)</div>
-                <div class="escrow-desc-ar">في حال وجود أي مشكلة في الشحن أو الجهاز، يمكنك فتح تذكرة دعم لاسترجاع عملاتك بالكامل.[span_18](start_span)[span_18](end_span)[span_19](start_span)[span_19](end_span)</div>
-                <div class="escrow-desc-ku">پشتیوانی: لە ئەگەری هەر كێشەیەك لە گەیاندن یان مۆبایلەكە، دەتوانیت سكاڵا تۆمار بكەیت بۆ وەرگرتنەوەی تەواوی پارەكەت.[span_20](start_span)[span_20](end_span)[span_21](start_span)[span_21](end_span)</div>
+                <div class="escrow-title">• الدعم وحل النزاعات:</div>
+                <div class="escrow-desc-ar">في حال وجود أي مشكلة في الشحن أو الجهاز، يمكنك فتح تذكرة دعم لاسترجاع عملاتك بالكامل.</div>
+                <div class="escrow-desc-ku">پشتیوانی: لە ئەگەری هەر كێشەیەك لە گەیاندن یان مۆبایلەكە، دەتوانیت سكاڵا تۆمار بكەیت بۆ وەرگرتنەوەی تەواوی پارەكەت.</div>
             </div>
         </div>
 
-        <!-- Section Header -->
-        <h2 class="section-title">الأجهزة المتاحة للطلب الآن[span_22](start_span)[span_22](end_span)[span_23](start_span)[span_23](end_span)</h2>
-        <p class="section-subtitle">مسعرة تلقائياً وفق سعر الإجماع العالمي ($314,159 GCV)</p>
+        <!-- Section Title -->
+        <h2 class="section-title">الأجهزة المتاحة للطلب الآن</h2>
+        <p class="section-subtitle" id="gcvSubTitle">مسعرة تلقائياً وفق سعر الإجماع العالمي ($314,159 GCV)</p>
 
         <!-- Products List -->
         <div class="products-grid">
@@ -257,12 +360,12 @@
             <div class="product-card">
                 <div>
                     <div class="phone-title">Samsung S24 Ultra</div>
-                    <div class="phone-specs">ذاكرة 512GB[span_24](start_span)[span_24](end_span)[span_25](start_span)[span_25](end_span)</div>
-                    <span class="gcv-tag">قيمة الجهاز: $1400</span>
+                    <div class="phone-specs">ذاكرة 512GB</div>
+                    <span class="gcv-tag" id="samsungUsdTag">قيمة الجهاز: $1400</span>
                 </div>
                 <div>
                     <div class="phone-price" id="samsungPrice">... Pi</div>
-                    <button class="btn-buy" onclick="buyPhone('Samsung S24 Ultra', 1400)">شراء وضمان استلام</button>
+                    <button class="btn-buy" onclick="buyPhone('Samsung S24 Ultra', prices.samsungUsd)">شراء وضمان استلام</button>
                 </div>
             </div>
 
@@ -270,13 +373,36 @@
             <div class="product-card">
                 <div>
                     <div class="phone-title">iPhone 15 Pro</div>
-                    <div class="phone-specs">ذاكرة 256GB[span_26](start_span)[span_26](end_span)[span_27](start_span)[span_27](end_span)</div>
-                    <span class="gcv-tag">قيمة الجهاز: $1200</span>
+                    <div class="phone-specs">ذاكرة 256GB</div>
+                    <span class="gcv-tag" id="iphoneUsdTag">قيمة الجهاز: $1200</span>
                 </div>
                 <div>
                     <div class="phone-price" id="iphonePrice">... Pi</div>
-                    <button class="btn-buy" onclick="buyPhone('iPhone 15 Pro', 1200)">شراء وضمان استلام</button>
+                    <button class="btn-buy" onclick="buyPhone('iPhone 15 Pro', prices.iphoneUsd)">شراء وضمان استلام</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal (نافذة التحكم بالأسعار) -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <div class="modal-title">تعديل أسعار المنتجات</div>
+            <div class="form-group">
+                <label>سعر الإجماع (GCV $):</label>
+                <input type="number" id="inputGcv" value="314159">
+            </div>
+            <div class="form-group">
+                <label>سعر Samsung S24 Ultra ($):</label>
+                <input type="number" id="inputSamsungUsd" value="1400">
+            </div>
+            <div class="form-group">
+                <label>سعر iPhone 15 Pro ($):</label>
+                <input type="number" id="inputIphoneUsd" value="1200">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-save" onclick="savePrices()">حفظ التعديلات</button>
+                <button class="btn-close" onclick="closeAdminModal()">إلغاء</button>
             </div>
         </div>
     </div>
@@ -284,18 +410,59 @@
     <script>
         // Pi Network SDK Setup
         window.Pi.init({ version: "2.0", sandbox: false });
-        
-        // معدل سعر الإجماع العالمي
-        const GCV_RATE = 314159;
 
-        function calculatePiPrice(usdPrice) {
-            // حساب السعر ديناميكياً بناءً على سعر الإجماع وإظهار الكسور بدقة
-            return parseFloat((usdPrice / GCV_RATE).toFixed(6));
+        // كلمة المرور الافتراضية لدخول التعديل (يمكنك تغييرها من هنا)
+        const ADMIN_PASSWORD = "1234";
+
+        // تحميل الأسعار من LocalStorage أو استخدام القيم الافتراضية
+        let prices = JSON.parse(localStorage.getItem('abu_seraj_prices')) || {
+            gcvRate: 314159,
+            samsungUsd: 1400,
+            iphoneUsd: 1200
+        };
+
+        function calculatePiPrice(usdPrice, gcv) {
+            return parseFloat((usdPrice / gcv).toFixed(6));
         }
 
-        // تحديث الأسعار تلقائياً في الواجهة عند تحميل الصفحة
-        document.getElementById('samsungPrice').innerText = "π " + calculatePiPrice(1400);
-        document.getElementById('iphonePrice').innerText = "π " + calculatePiPrice(1200);
+        function updateUI() {
+            // تحديث العناوين بالدولار وبكسور Pi
+            document.getElementById('gcvSubTitle').innerText = "مسعرة تلقائياً وفق سعر الإجماع ($" + prices.gcvRate.toLocaleString() + " GCV)";
+            document.getElementById('samsungUsdTag').innerText = "قيمة الجهاز: $" + prices.samsungUsd;
+            document.getElementById('iphoneUsdTag').innerText = "قيمة الجهاز: $" + prices.iphoneUsd;
+
+            document.getElementById('samsungPrice').innerText = "π " + calculatePiPrice(prices.samsungUsd, prices.gcvRate);
+            document.getElementById('iphonePrice').innerText = "π " + calculatePiPrice(prices.iphoneUsd, prices.gcvRate);
+        }
+
+        // فتح لوحة التحكم
+        function openAdminModal() {
+            const pass = prompt("أدخل كلمة المرور لتعديل الأسعار:");
+            if (pass === ADMIN_PASSWORD) {
+                document.getElementById('inputGcv').value = prices.gcvRate;
+                document.getElementById('inputSamsungUsd').value = prices.samsungUsd;
+                document.getElementById('inputIphoneUsd').value = prices.iphoneUsd;
+                document.getElementById('adminModal').style.display = "flex";
+            } else if (pass !== null) {
+                alert("كلمة المرور غير صحيحة!");
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = "none";
+        }
+
+        // حفظ الأسعار الجديدة
+        function savePrices() {
+            prices.gcvRate = parseFloat(document.getElementById('inputGcv').value) || 314159;
+            prices.samsungUsd = parseFloat(document.getElementById('inputSamsungUsd').value) || 1400;
+            prices.iphoneUsd = parseFloat(document.getElementById('inputIphoneUsd').value) || 1200;
+
+            localStorage.setItem('abu_seraj_prices', JSON.stringify(prices));
+            updateUI();
+            closeAdminModal();
+            alert("تم حفظ وتحديث الأسعار بنجاح!");
+        }
 
         async function setup() {
             const statusElem = document.getElementById('status');
@@ -311,12 +478,12 @@
         }
 
         function buyPhone(model, usdPrice) {
-            const piAmount = calculatePiPrice(usdPrice);
+            const piAmount = calculatePiPrice(usdPrice, prices.gcvRate);
 
             window.Pi.createPayment({
                 amount: piAmount,
                 memo: "شراء جهاز " + model + " بسعر الإجماع وعقد الضمان",
-                metadata: { model: model, usd_value: usdPrice, gcv_rate: GCV_RATE }
+                metadata: { model: model, usd_value: usdPrice, gcv_rate: prices.gcvRate }
             }, {
                 onReadyForServerApproval: (paymentId) => {
                     console.log("تم حجز المبلغ بالضمان:", paymentId);
@@ -333,6 +500,8 @@
             });
         }
 
+        // تشغيل واجهة الأسعار فور التحميل
+        updateUI();
         setup();
     </script>
 </body>
