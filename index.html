@@ -22,6 +22,7 @@
             --text-kurdi: #607d8b;
             --primary-green: #10b981;
             --primary-green-hover: #059669;
+            --danger-red: #ef4444;
             --pi-color: #0f172a;
             --gcv-gold: #b45309;
         }
@@ -49,24 +50,25 @@
             position: relative;
         }
 
-        /* Top Header Bar */
+        /* Top Bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
+            background: #ffffff;
+            padding: 10px 14px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .user-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #ffffff;
-            padding: 6px 14px;
-            border-radius: 20px;
             font-size: 13px;
             color: var(--text-muted);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-weight: 700;
         }
 
         .status-dot {
@@ -76,27 +78,167 @@
             border-radius: 50%;
         }
 
-        .admin-btn {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+        .menu-toggle-btn {
+            background: #1e293b;
+            color: #ffffff;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Slide-out Navigation Drawer */
+        .drawer-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
+            z-index: 999;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0; right: -290px; width: 290px; height: 100%;
+            background: #ffffff;
+            z-index: 1000;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            transition: right 0.3s ease, left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        body[dir="ltr"] .drawer {
+            right: auto;
+            left: -290px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+        }
+
+        .drawer.active {
+            right: 0;
+        }
+
+        body[dir="ltr"] .drawer.active {
+            left: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 16px;
+        }
+
+        .drawer-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--pi-color);
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .drawer-section {
+            margin-bottom: 20px;
+        }
+
+        .drawer-section-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        /* Language Switcher Buttons */
+        .lang-switch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .lang-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 8px 4px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 700;
             color: var(--text-dark);
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            font-size: 16px;
-            transition: all 0.2s;
+            text-align: center;
         }
 
-        .admin-btn:hover {
+        .lang-btn.active {
+            background: #1e293b;
+            color: #ffffff;
+            border-color: #1e293b;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-dark);
+        }
+
+        .info-row i {
+            color: var(--primary-green);
+            width: 18px;
+            text-align: center;
+        }
+
+        .drawer-menu-btn {
+            width: 100%;
             background: #f1f5f9;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: background 0.2s;
         }
 
-        /* Escrow Banner (نظام الضمان) */
+        .drawer-menu-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .drawer-menu-btn i {
+            color: #3b82f6;
+        }
+
+        /* Escrow Banner */
         .escrow-card {
             background-color: var(--escrow-bg);
             border: 1px solid var(--escrow-border);
@@ -109,7 +251,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
             color: #065f46;
             margin-bottom: 14px;
@@ -125,26 +267,17 @@
 
         .escrow-title {
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13.5px;
             color: #047857;
             margin-bottom: 2px;
         }
 
-        .escrow-desc-ar {
-            font-size: 13px;
+        .escrow-desc {
+            font-size: 12.5px;
             color: #1f2937;
             line-height: 1.4;
         }
 
-        .escrow-desc-ku {
-            font-size: 12px;
-            color: var(--text-kurdi);
-            margin-top: 3px;
-            line-height: 1.4;
-            direction: rtl;
-        }
-
-        /* Section Title */
         .section-title {
             text-align: center;
             font-size: 20px;
@@ -159,7 +292,6 @@
             margin-bottom: 16px;
         }
 
-        /* Products Grid */
         .products-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -178,7 +310,7 @@
         }
 
         .phone-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             margin-bottom: 2px;
         }
@@ -189,7 +321,6 @@
             margin-bottom: 6px;
         }
 
-        /* GCV Tag */
         .gcv-tag {
             font-size: 10px;
             background: #fef3c7;
@@ -202,7 +333,7 @@
         }
 
         .phone-price {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
             color: var(--pi-color);
             margin-bottom: 12px;
@@ -219,7 +350,7 @@
             border: none;
             padding: 10px 4px;
             border-radius: 12px;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 700;
             cursor: pointer;
             transition: background 0.2s;
@@ -229,38 +360,44 @@
             background-color: var(--primary-green-hover);
         }
 
-        /* Admin Modal Styling */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5);
             backdrop-filter: blur(4px);
-            z-index: 1000;
+            z-index: 1001;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 16px;
         }
 
         .modal-content {
             background: #ffffff;
             border-radius: 20px;
-            padding: 24px;
+            padding: 20px;
             width: 100%;
-            max-width: 360px;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
 
         .modal-title {
             font-size: 18px;
             font-weight: 800;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-align: center;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-align: right;
+        }
+
+        body[dir="ltr"] .form-group {
+            text-align: left;
         }
 
         .form-group label {
@@ -273,17 +410,57 @@
 
         .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 8px 10px;
             border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 13px;
             outline: none;
+        }
+
+        .admin-section-title {
+            font-size: 14px;
+            font-weight: 800;
+            margin: 16px 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .admin-product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .admin-product-info {
+            font-size: 12px;
+        }
+
+        .btn-delete-item {
+            background: var(--danger-red);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .add-product-box {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 10px;
         }
 
         .modal-actions {
             display: flex;
             gap: 8px;
-            margin-top: 18px;
+            margin-top: 16px;
         }
 
         .btn-save {
@@ -311,16 +488,72 @@
 </head>
 <body>
 
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+    <!-- Side Drawer -->
+    <div class="drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <div class="drawer-title">ABU SERAJ PHONE</div>
+            <button class="drawer-close" onclick="closeDrawer()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="drawer-section">
+            <div class="drawer-section-title" id="t-langTitle">اللغة / Ziman / Language</div>
+            <div class="lang-switch-grid">
+                <button class="lang-btn" id="lang-ar" onclick="switchLanguage('ar')">العربية</button>
+                <button class="lang-btn" id="lang-ku" onclick="switchLanguage('ku')">بادينى</button>
+                <button class="lang-btn" id="lang-en" onclick="switchLanguage('en')">English</button>
+            </div>
+        </div>
+
+        <!-- Store Info -->
+        <div class="drawer-section">
+            <div class="drawer-section-title" id="t-storeInfoTitle">معلومات المحل والعمل</div>
+            <div class="info-box">
+                <div class="info-row">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span id="drawerAddress">العراق - دهوك / الموصل</span>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-phone"></i>
+                    <span id="drawerPhone" dir="ltr">+964 750 000 0000</span>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="drawerWorkHours">09:00 ص - 10:00 م</span>
+                </div>
+                <div class="info-row" style="margin-top: 4px;">
+                    <i class="fa-solid fa-store" style="color: #10b981;"></i>
+                    <span id="t-storeOpenStatus" style="color: #10b981; font-weight: 800;">المحل مفتوح الآن للطلب</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Management Controls -->
+        <div class="drawer-section">
+            <div class="drawer-section-title" id="t-adminTitle">إدارة المتجر والأسعار</div>
+            <button class="drawer-menu-btn" onclick="openAdminModalWithFocus('addProduct')">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span id="t-btnAddProductMenu">إضافة منتج جديد</span>
+            </button>
+            <button class="drawer-menu-btn" onclick="openAdminModalWithFocus('gcvPrice')">
+                <i class="fa-solid fa-sliders"></i>
+                <span id="t-btnEditPricesMenu">تعديل الأسعار وسعر الإجماع</span>
+            </button>
+        </div>
+    </div>
+
     <div class="app-container">
         <!-- Top Bar -->
         <div class="top-bar">
             <div class="user-badge">
                 <span class="status-dot" id="statusDot"></span>
-                <span id="status">جاري الاتصال بحساب Pi...</span>
+                <span id="userStatus">ABU SERAJ PHONE</span>
             </div>
-            <!-- زر لوحة تحكم تغيير الأسعار -->
-            <button class="admin-btn" onclick="openAdminModal()" title="تعديل الأسعار">
-                <i class="fa-solid fa-gear"></i>
+            <button class="menu-toggle-btn" onclick="openDrawer()">
+                <i class="fa-solid fa-bars"></i>
             </button>
         </div>
 
@@ -328,181 +561,188 @@
         <div class="escrow-card">
             <div class="escrow-header">
                 <i class="fa-solid fa-shield-halved"></i>
-                <span>نظام ضمان البيع والشراء الآمن (Escrow):</span>
+                <span id="t-escrowMainTitle">نظام ضمان البيع والشراء الآمن (Escrow):</span>
             </div>
 
             <div class="escrow-item">
-                <div class="escrow-title">• حماية المشتري:</div>
-                <div class="escrow-desc-ar">لا يتم تحرير الـ Pi نهائياً للبائع إلا بعد استلامك للهاتف ومعاينته والتأكد من مطابقة المواصفات خلال 48 ساعة.</div>
-                <div class="escrow-desc-ku">پاراستنی كڕیار: پی ناكرێتە پارەی فرۆشیار تا ئەو كاتەی مۆبایلەكەت وەردەگریت و پشكنینی بۆ دەكەیت لە ماوەی ٤٨ كاتژمێردا.</div>
+                <div class="escrow-title" id="t-escrowBuyerTitle">• حماية المشتري:</div>
+                <div class="escrow-desc" id="t-escrowBuyerDesc">لا يتم تحرير الـ Pi نهائياً للبائع إلا بعد استلامك للهاتف ومعاينته والتأكد من مطابقة المواصفات خلال 48 ساعة.</div>
             </div>
 
             <div class="escrow-item" style="margin-top: 10px;">
-                <div class="escrow-title">• حماية البائع:</div>
-                <div class="escrow-desc-ar">يلتزم المشتري بتأكيد الدفع مسبقاً وتجميده في عقد الشبكة قبل البدء في شحن وتجهيز الطلب لضمان جدية الشراء.</div>
-                <div class="escrow-desc-ku">پاراستنی فرۆشیار: كڕیار پابەندە بە پشتڕاستكردنەوەی پارەدان بە پێشوەختە بۆ دلنیابوون لە جدیەتی كڕین.</div>
+                <div class="escrow-title" id="t-escrowSellerTitle">• حماية البائع:</div>
+                <div class="escrow-desc" id="t-escrowSellerDesc">يلتزم المشتري بتأكيد الدفع مسبقاً وتجميده في عقد الشبكة قبل البدء في شحن وتجهيز الطلب لضمان جدية الشراء.</div>
             </div>
 
             <div class="escrow-item" style="margin-top: 10px;">
-                <div class="escrow-title">• الدعم وحل النزاعات:</div>
-                <div class="escrow-desc-ar">في حال وجود أي مشكلة في الشحن أو الجهاز، يمكنك فتح تذكرة دعم لاسترجاع عملاتك بالكامل.</div>
-                <div class="escrow-desc-ku">پشتیوانی: لە ئەگەری هەر كێشەیەك لە گەیاندن یان مۆبایلەكە، دەتوانیت سكاڵا تۆمار بكەیت بۆ وەرگرتنەوەی تەواوی پارەكەت.</div>
+                <div class="escrow-title" id="t-escrowSupportTitle">• الدعم وحل النزاعات:</div>
+                <div class="escrow-desc" id="t-escrowSupportDesc">في حال وجود أي مشكلة في الشحن أو الجهاز، يمكنك فتح تذكرة دعم لاسترجاع عملاتك بالكامل.</div>
             </div>
         </div>
 
-        <!-- Section Title -->
-        <h2 class="section-title">الأجهزة المتاحة للطلب الآن</h2>
+        <h2 class="section-title" id="t-availableTitle">الأجهزة المتاحة للطلب الآن</h2>
         <p class="section-subtitle" id="gcvSubTitle">مسعرة تلقائياً وفق سعر الإجماع العالمي ($314,159 GCV)</p>
 
-        <!-- Products List -->
-        <div class="products-grid">
-            <!-- Samsung S24 Ultra -->
-            <div class="product-card">
-                <div>
-                    <div class="phone-title">Samsung S24 Ultra</div>
-                    <div class="phone-specs">ذاكرة 512GB</div>
-                    <span class="gcv-tag" id="samsungUsdTag">قيمة الجهاز: $1400</span>
-                </div>
-                <div>
-                    <div class="phone-price" id="samsungPrice">... Pi</div>
-                    <button class="btn-buy" onclick="buyPhone('Samsung S24 Ultra', prices.samsungUsd)">شراء وضمان استلام</button>
-                </div>
-            </div>
-
-            <!-- iPhone 15 Pro -->
-            <div class="product-card">
-                <div>
-                    <div class="phone-title">iPhone 15 Pro</div>
-                    <div class="phone-specs">ذاكرة 256GB</div>
-                    <span class="gcv-tag" id="iphoneUsdTag">قيمة الجهاز: $1200</span>
-                </div>
-                <div>
-                    <div class="phone-price" id="iphonePrice">... Pi</div>
-                    <button class="btn-buy" onclick="buyPhone('iPhone 15 Pro', prices.iphoneUsd)">شراء وضمان استلام</button>
-                </div>
-            </div>
-        </div>
+        <div class="products-grid" id="productsGrid"></div>
     </div>
 
-    <!-- Admin Modal (نافذة التحكم بالأسعار) -->
+    <!-- Admin Modal -->
     <div class="modal" id="adminModal">
         <div class="modal-content">
-            <div class="modal-title">تعديل أسعار المنتجات</div>
+            <div class="modal-title" id="t-modalTitle">إدارة المتجر والبيانات</div>
+            
             <div class="form-group">
-                <label>سعر الإجماع (GCV $):</label>
+                <label id="t-lblGcv">سعر الإجماع (GCV $):</label>
                 <input type="number" id="inputGcv" value="314159">
             </div>
+
+            <div class="admin-section-title" id="t-adminContactTitle">بيانات التواصل والعمل:</div>
             <div class="form-group">
-                <label>سعر Samsung S24 Ultra ($):</label>
-                <input type="number" id="inputSamsungUsd" value="1400">
+                <label id="t-lblAddress">عنوان المحل:</label>
+                <input type="text" id="inputAddress" value="العراق - دهوك / الموصل">
             </div>
             <div class="form-group">
-                <label>سعر iPhone 15 Pro ($):</label>
-                <input type="number" id="inputIphoneUsd" value="1200">
+                <label id="t-lblPhone">رقم الهاتف:</label>
+                <input type="text" id="inputPhone" value="+964 750 000 0000">
             </div>
+            <div class="form-group">
+                <label id="t-lblWorkHours">أوقات العمل:</label>
+                <input type="text" id="inputWorkHours" value="09:00 ص - 10:00 م">
+            </div>
+
+            <div class="admin-section-title" id="t-adminCurrentProds">الأجهزة المتاحة حالياً:</div>
+            <div id="adminProductList"></div>
+
+            <div class="add-product-box" id="addProductSection">
+                <div style="font-weight: 800; font-size: 13px; margin-bottom: 8px;" id="t-adminAddNewHeader">إضافة هاتف جديد:</div>
+                <div class="form-group">
+                    <label id="t-lblPhoneName">اسم الهاتف:</label>
+                    <input type="text" id="newTitle" placeholder="مثال: iPhone 17 Pro Max">
+                </div>
+                <div class="form-group">
+                    <label id="t-lblPhoneSpecs">المواصفات / الذاكرة:</label>
+                    <input type="text" id="newSpecs" placeholder="مثال: ذاكرة 512GB">
+                </div>
+                <div class="form-group">
+                    <label id="t-lblPhonePrice">السعر بالدولار ($):</label>
+                    <input type="number" id="newPriceUsd" placeholder="مثال: 1400">
+                </div>
+                <button type="button" onclick="addNewProduct()" style="width: 100%; background: #3b82f6; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 4px;" id="t-btnAddProductList">+ إضافة الجهاز للقائمة</button>
+            </div>
+
             <div class="modal-actions">
-                <button class="btn-save" onclick="savePrices()">حفظ التعديلات</button>
-                <button class="btn-close" onclick="closeAdminModal()">إلغاء</button>
+                <button class="btn-save" onclick="saveAdminData()" id="t-btnSave">حفظ التغيرات</button>
+                <button class="btn-close" onclick="closeAdminModal()" id="t-btnClose">إلغاء</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Pi Network SDK Setup
-        window.Pi.init({ version: "2.0", sandbox: false });
-
-        // كلمة المرور الافتراضية لدخول التعديل (يمكنك تغييرها من هنا)
         const ADMIN_PASSWORD = "1234";
 
-        // تحميل الأسعار من LocalStorage أو استخدام القيم الافتراضية
-        let prices = JSON.parse(localStorage.getItem('abu_seraj_prices')) || {
+        let currentLang = localStorage.getItem('abu_seraj_lang') || 'ar';
+
+        let storeData = JSON.parse(localStorage.getItem('abu_seraj_store_data')) || {
             gcvRate: 314159,
-            samsungUsd: 1400,
-            iphoneUsd: 1200
+            address: "العراق - دهوك / الموصل",
+            phone: "+964 750 000 0000",
+            workHours: "09:00 ص - 10:00 م",
+            products: [
+                { id: 1, title: 'Samsung S24 Ultra', specs: 'ذاكرة 512GB', usdPrice: 600 },
+                { id: 2, title: 'iPhone 15 Pro', specs: 'ذاكرة 256GB', usdPrice: 600 }
+            ]
         };
 
-        function calculatePiPrice(usdPrice, gcv) {
-            return parseFloat((usdPrice / gcv).toFixed(6));
-        }
-
-        function updateUI() {
-            // تحديث العناوين بالدولار وبكسور Pi
-            document.getElementById('gcvSubTitle').innerText = "مسعرة تلقائياً وفق سعر الإجماع ($" + prices.gcvRate.toLocaleString() + " GCV)";
-            document.getElementById('samsungUsdTag').innerText = "قيمة الجهاز: $" + prices.samsungUsd;
-            document.getElementById('iphoneUsdTag').innerText = "قيمة الجهاز: $" + prices.iphoneUsd;
-
-            document.getElementById('samsungPrice').innerText = "π " + calculatePiPrice(prices.samsungUsd, prices.gcvRate);
-            document.getElementById('iphonePrice').innerText = "π " + calculatePiPrice(prices.iphoneUsd, prices.gcvRate);
-        }
-
-        // فتح لوحة التحكم
-        function openAdminModal() {
-            const pass = prompt("أدخل كلمة المرور لتعديل الأسعار:");
-            if (pass === ADMIN_PASSWORD) {
-                document.getElementById('inputGcv').value = prices.gcvRate;
-                document.getElementById('inputSamsungUsd').value = prices.samsungUsd;
-                document.getElementById('inputIphoneUsd').value = prices.iphoneUsd;
-                document.getElementById('adminModal').style.display = "flex";
-            } else if (pass !== null) {
-                alert("كلمة المرور غير صحيحة!");
-            }
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').style.display = "none";
-        }
-
-        // حفظ الأسعار الجديدة
-        function savePrices() {
-            prices.gcvRate = parseFloat(document.getElementById('inputGcv').value) || 314159;
-            prices.samsungUsd = parseFloat(document.getElementById('inputSamsungUsd').value) || 1400;
-            prices.iphoneUsd = parseFloat(document.getElementById('inputIphoneUsd').value) || 1200;
-
-            localStorage.setItem('abu_seraj_prices', JSON.stringify(prices));
-            updateUI();
-            closeAdminModal();
-            alert("تم حفظ وتحديث الأسعار بنجاح!");
-        }
-
-        async function setup() {
-            const statusElem = document.getElementById('status');
-            const statusDot = document.getElementById('statusDot');
-            
-            try {
-                const auth = await window.Pi.authenticate(['username', 'payments']);
-                statusElem.innerText = "مرحباً: " + auth.user.username;
-                statusDot.style.backgroundColor = "#10b981";
-            } catch (e) {
-                statusElem.innerText = "يرجى الفتح من تطبيق Pi Browser";
-            }
-        }
-
-        function buyPhone(model, usdPrice) {
-            const piAmount = calculatePiPrice(usdPrice, prices.gcvRate);
-
-            window.Pi.createPayment({
-                amount: piAmount,
-                memo: "شراء جهاز " + model + " بسعر الإجماع وعقد الضمان",
-                metadata: { model: model, usd_value: usdPrice, gcv_rate: prices.gcvRate }
-            }, {
-                onReadyForServerApproval: (paymentId) => {
-                    console.log("تم حجز المبلغ بالضمان:", paymentId);
-                },
-                onReadyForServerCompletion: (paymentId, txid) => {
-                    alert("🎉 تم تأكيد طلبك وجاري شحن الجهاز بنجاح!\nرقم المعاملة: " + txid);
-                },
-                onCancel: (paymentId) => {
-                    alert("تم إلغاء عملية الدفع.");
-                },
-                onError: (err, payment) => {
-                    alert("حدث خطأ في الدفع: " + err.message);
-                }
-            });
-        }
-
-        // تشغيل واجهة الأسعار فور التحميل
-        updateUI();
-        setup();
-    </script>
-</body>
-</html>
+        const translations = {
+            ar: {
+                dir: 'rtl',
+                storeInfoTitle: 'معلومات المحل والعمل',
+                storeOpenStatus: 'المحل مفتوح الآن للطلب',
+                adminTitle: 'إدارة المتجر والأسعار',
+                btnAddProductMenu: 'إضافة منتج جديد',
+                btnEditPricesMenu: 'تعديل الأسعار وسعر الإجماع',
+                escrowMainTitle: 'نظام ضمان البيع والشراء الآمن (Escrow):',
+                escrowBuyerTitle: '• حماية المشتري:',
+                escrowBuyerDesc: 'لا يتم تحرير الـ Pi نهائياً للبائع إلا بعد استلامك للهاتف ومعاينته والتأكد من مطابقة المواصفات خلال 48 ساعة.',
+                escrowSellerTitle: '• حماية البائع:',
+                escrowSellerDesc: 'يلتزم المشتري بتأكيد الدفع مسبقاً وتجميده في عقد الشبكة قبل البدء في شحن وتجهيز الطلب لضمان جدية الشراء.',
+                escrowSupportTitle: '• الدعم وحل النزاعات:',
+                escrowSupportDesc: 'في حال وجود أي مشكلة في الشحن أو الجهاز، يمكنك فتح تذكرة دعم لاسترجاع عملاتك بالكامل.',
+                availableTitle: 'الأجهزة المتاحة للطلب الآن',
+                gcvSubTitle: 'مسعرة تلقائياً وفق سعر الإجماع العالمي ($314,159 GCV)',
+                btnBuy: 'شراء وضمان استلام',
+                deviceValue: 'قيمة الجهاز:',
+                modalTitle: 'إدارة المتجر والبيانات',
+                lblGcv: 'سعر الإجماع (GCV $):',
+                adminContactTitle: 'بيانات التواصل والعمل:',
+                lblAddress: 'عنوان المحل:',
+                lblPhone: 'رقم الهاتف:',
+                lblWorkHours: 'أوقات العمل:',
+                adminCurrentProds: 'الأجهزة المتاحة حالياً:',
+                adminAddNewHeader: 'إضافة هاتف جديد:',
+                lblPhoneName: 'اسم الهاتف:',
+                lblPhoneSpecs: 'المواصفات / الذاكرة:',
+                lblPhonePrice: 'السعر بالدولار ($):',
+                btnAddProductList: '+ إضافة الجهاز للقائمة',
+                btnSave: 'حفظ التغيرات',
+                btnClose: 'إلغاء'
+            },
+            ku: {
+                dir: 'rtl',
+                storeInfoTitle: 'زانیاریێن دوكانێ و كاری',
+                storeOpenStatus: 'دوكان نوكە ڤەكریە بۆ داخوازكرنێ',
+                adminTitle: 'ڕێڤەبرنا دوكانێ و بهایان',
+                btnAddProductMenu: 'زێدەكرنا مۆبایلەكا نوو',
+                btnEditPricesMenu: 'دەستكاریكرنا بهایان و بهایێ GCV',
+                escrowMainTitle: 'سیستەمێ مسۆگەركرنا كڕین و فرۆشتنێ (Escrow):',
+                escrowBuyerTitle: '• پاراستنا كڕیاری:',
+                escrowBuyerDesc: 'پارەیێ Pi بۆ فرۆشیاری ناچیت حەتا تو مۆبایلا خۆ وەرنەگری و پشكنینێ بۆ نەكەی د ماوێ ٤٨ دەمژمێران دا.',
+                escrowSellerTitle: '• پاراستنا فرۆشیاری:',
+                escrowSellerDesc: 'کڕیار پێدڤی یە پارەی پێشوەخت د گرێبەستا تۆڕێ دا بلۆک بکەت بەریا هنارتنا داخوازیێ.',
+                escrowSupportTitle: '• پشتیڤانی و چارەسەریا ئاریشان:',
+                escrowSupportDesc: 'ئەگەر هەر ئاریشەک د گەیاندنێ یان مۆبایلێ دا هه‌بیت، دتۆانی سكاڵایێ تۆمار بكەی بۆ زڤڕاندنا تەواویا پارەیێ خۆ.',
+                availableTitle: 'مۆبایلێن بەردەست بۆ داخوازكرنێ',
+                gcvSubTitle: 'بهایێ وێ دهێتە ژمارتن ل دووڤ بهایێ جیهانی ($314,159 GCV)',
+                btnBuy: 'کڕین و مسۆگەریا وەرگرتنێ',
+                deviceValue: 'بهایێ مۆبایلێ:',
+                modalTitle: 'ڕێڤەبرنا دوكانێ و زانیاریان',
+                lblGcv: 'بهایێ إجماع ($ GCV):',
+                adminContactTitle: 'زانیاریێن پەیوەندیێ و كاری:',
+                lblAddress: 'ناڤنیشانێ دوكانێ:',
+                lblPhone: 'ژمارا تەلەفۆنێ:',
+                lblWorkHours: 'دەمێن كاری:',
+                adminCurrentProds: 'مۆبایلێن بەردەست نوكە:',
+                adminAddNewHeader: 'زێدەكرنا مۆبایلا نوو:',
+                lblPhoneName: 'ناڤێ مۆبایلێ:',
+                lblPhoneSpecs: 'تایبەتمەندی / میمۆری:',
+                lblPhonePrice: 'بها ب دۆلار ($):',
+                btnAddProductList: '+ زێدەكرنا مۆبایلێ بۆ لیستی',
+                btnSave: 'پاراستنا دەستكاریان',
+                btnClose: 'پاشگەزبوون'
+            },
+            en: {
+                dir: 'ltr',
+                storeInfoTitle: 'Store & Work Info',
+                storeOpenStatus: 'Store is now Open for Orders',
+                adminTitle: 'Store & Price Management',
+                btnAddProductMenu: 'Add New Product',
+                btnEditPricesMenu: 'Edit Prices & GCV Rate',
+                escrowMainTitle: 'Safe Escrow Guarantee System:',
+                escrowBuyerTitle: '• Buyer Protection:',
+                escrowBuyerDesc: 'Pi coins are held securely and only released to the seller after you receive and verify the phone within 48 hours.',
+                escrowSellerTitle: '• Seller Protection:',
+                escrowSellerDesc: 'The buyer locks the payment in the network smart contract before shipping begins to ensure genuine commitment.',
+                escrowSupportTitle: '• Support & Disputes:',
+                escrowSupportDesc: 'If any shipping or product issue arises, you can open a support ticket for a full refund.',
+                availableTitle: 'Available Devices for Order',
+                gcvSubTitle: 'Automatically priced based on Global Consensus Rate ($314,159 GCV)',
+                btnBuy: 'Buy with Escrow Guarantee',
+                deviceValue: 'Device Value:',
+                modalTitle: 'Store & Data Management',
+                lblGcv: 'Consensus Rate (GCV $):',
+                adminContactTitle: 'Contact & Working Hours:',
+                lblAddress: 'Store Address:',
+                lblPhone: 'Phone Number:',
+                lblWorkHours: 'Working Hours:',
+                adminCurrentProds: 'Currently Available Devices:',
+                adminAddNewHeader:
